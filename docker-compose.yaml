@@ -1,0 +1,25 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16.2-alpine3.18
+    environment:
+      POSTGRES_DB: "${PG_DATABASE}"
+      POSTGRES_USER: "${PG_USER}"
+      POSTGRES_PASSWORD: "${PG_PASSWORD}"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - "${PG_PORT}:${PG_PORT}"
+    expose:
+      - ${PG_PORT}
+
+    command: -p ${PG_PORT}
+
+volumes:
+  postgres-data:

@@ -2,3 +2,7 @@
 .idea
 .vscode
 !.vscode/extensions.json
+
+# Env
+.env*
+!.env.example
