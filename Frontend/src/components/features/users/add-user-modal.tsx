@@ -1,17 +1,16 @@
 import { Button, Callout, Dialog, Flex } from "@radix-ui/themes";
 import { FC, ReactNode, useState } from "react";
-import { useMutation } from "react-query";
 
-import { updateUser } from "../../../api/users";
+import { useMutation } from "react-query";
+import { createNewUser } from "../../../api/users";
 import { useMessage } from "../../../hooks/useMessage";
 import { User } from "../../../models/user";
 import { MessageType } from "../../../shared/types";
 import { validateUserForm } from "../../../validators/user-form-validator";
 import { UserForm } from "../../entities/user/user-form";
 
-interface IEditUserModalProps {
+interface IAllUserModalProps {
   children: ReactNode;
-  user: User;
   callback?: (
     message: string,
     messageType: MessageType,
@@ -19,9 +18,8 @@ interface IEditUserModalProps {
   ) => void;
 }
 
-export const EditUserModal: FC<IEditUserModalProps> = ({
+export const AddUserModal: FC<IAllUserModalProps> = ({
   children,
-  user,
   callback,
 }) => {
   const [formState, setFormState] = useState({});
@@ -29,11 +27,11 @@ export const EditUserModal: FC<IEditUserModalProps> = ({
   const { addMessage, getMessages, hasMessages } = useMessage();
 
   const { mutate, isSuccess, isError, error, reset } = useMutation(
-    async (user: User) => await updateUser(user as any)
+    async (user: User) => await createNewUser(user)
   );
 
   if (isSuccess) {
-    callback?.("Пользователь успешно обновлён!", "SUCCESS", true);
+    callback?.("Пользователь успешно создан!", "SUCCESS", true);
     reset();
   } else if (isError) {
     callback?.(
@@ -71,7 +69,7 @@ export const EditUserModal: FC<IEditUserModalProps> = ({
       </Dialog.Trigger>
 
       <Dialog.Content maxWidth="450px">
-        <Dialog.Title>Редактирование пользователя</Dialog.Title>
+        <Dialog.Title>Добавление пользователя</Dialog.Title>
 
         {hasMessages() && (
           <Flex direction="column" gap="2" mb="2">
@@ -88,7 +86,7 @@ export const EditUserModal: FC<IEditUserModalProps> = ({
           </Flex>
         )}
 
-        <UserForm initialData={user} onChange={onDataChanged}>
+        <UserForm onChange={onDataChanged}>
           <Flex gap="3" mt="4" justify="end">
             <Button
               variant="soft"
@@ -97,7 +95,7 @@ export const EditUserModal: FC<IEditUserModalProps> = ({
             >
               Отмена
             </Button>
-            <Button onClick={handleSubmit}>Сохранить</Button>
+            <Button onClick={handleSubmit}>Создать</Button>
           </Flex>
         </UserForm>
       </Dialog.Content>

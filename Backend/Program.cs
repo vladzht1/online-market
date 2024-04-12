@@ -21,7 +21,8 @@ builder.Services.AddSingleton<IUserService>(context => new UserServiceImpl(conte
 
 var app = builder.Build();
 
-app.UseCors(builder => builder.AllowAnyOrigin());
+// app.UseCors(builder => builder.AllowAnyOrigin());
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.Use(async (context, next) =>
 {

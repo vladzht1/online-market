@@ -15,7 +15,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <QueryClientProvider client={queryClient}>
-    <Theme>
+    <Theme accentColor="blue">
       <React.StrictMode>
         <App />
       </React.StrictMode>

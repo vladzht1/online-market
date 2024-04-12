@@ -26,6 +26,7 @@ export const HomePage: FC = () => {
           <Flex gap="4" my="4">
             {HEADER_LINKS.map((link) => (
               <Button
+                color="blue"
                 onClick={() => redirectToTable(link.href)}
                 key={link.label}
               >

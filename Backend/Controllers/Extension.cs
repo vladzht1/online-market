@@ -24,8 +24,13 @@ public static class ControllerExtension
                 {
                     return new NotFoundObjectResult(new ReturnDto(StatusCodes.Status404NotFound, exception.Message).Content);
                 }
+                else if (exception is OperationFailedException)
+                {
+                    // TODO: Send 500 status code
+                    return new ObjectResult(new ReturnDto(StatusCodes.Status500InternalServerError, exception.Message).Content);
+                }
 
-                return new BadRequestObjectResult(new ReturnDto(400));
+                return new BadRequestObjectResult(new ReturnDto(400, exception.Message).Content);
             }
         );
     }

@@ -8,7 +8,11 @@ import { MessageType } from "../../../shared/types";
 interface IDeleteUserModalProps {
   children: ReactNode;
   userId: number;
-  callback?: (message: string, messageType: MessageType) => void;
+  callback?: (
+    message: string,
+    messageType: MessageType,
+    success: boolean
+  ) => void;
 }
 
 export const DeleteUserModal: FC<IDeleteUserModalProps> = ({
@@ -21,12 +25,13 @@ export const DeleteUserModal: FC<IDeleteUserModalProps> = ({
   );
 
   if (isSuccess) {
-    callback?.("Пользователь успешно удалён!", "SUCCESS");
+    callback?.("Пользователь успешно удалён!", "SUCCESS", true);
     reset();
   } else if (isError) {
     callback?.(
       (error as any).response?.data?.message ?? (error as any).message,
-      "ERROR"
+      "ERROR",
+      false
     );
 
     reset();
