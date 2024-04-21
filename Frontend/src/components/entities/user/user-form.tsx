@@ -1,5 +1,6 @@
-import { Flex, Text, TextField } from "@radix-ui/themes";
+import { Flex, IconButton, Text, TextField } from "@radix-ui/themes";
 import { FC, ReactNode, useEffect, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { User } from "../../../models/user";
 
@@ -27,6 +28,8 @@ export const UserForm: FC<IUserFormProps> = ({
     }
   );
 
+  const [showPassword, setShowPassword] = useState(false);
+
   useEffect(() => {
     onChange?.(formState);
   }, [formState, onChange]);
@@ -40,22 +43,22 @@ export const UserForm: FC<IUserFormProps> = ({
       <Flex direction="column" gap="3">
         <label>
           <Text as="div" size="2" mb="1" weight="bold">
-            Имя
-          </Text>
-          <TextField.Root
-            value={formState.firstName}
-            onChange={(event) => setValue("firstName", event.target.value)}
-            placeholder="Имя"
-          />
-        </label>
-        <label>
-          <Text as="div" size="2" mb="1" weight="bold">
             Фамилия
           </Text>
           <TextField.Root
             value={formState.lastName}
             onChange={(event) => setValue("lastName", event.target.value)}
             placeholder="Фамилия"
+          />
+        </label>
+        <label>
+          <Text as="div" size="2" mb="1" weight="bold">
+            Имя
+          </Text>
+          <TextField.Root
+            value={formState.firstName}
+            onChange={(event) => setValue("firstName", event.target.value)}
+            placeholder="Имя"
           />
         </label>
         <label>
@@ -96,9 +99,22 @@ export const UserForm: FC<IUserFormProps> = ({
             value={formState.password}
             onChange={(event) => setValue("password", event.target.value)}
             placeholder="Пароль"
-            type="password"
+            type={showPassword ? "text" : "password"}
             autoComplete="new-password"
-          />
+          >
+            {/* This slot must be here to place the show password button on the right side */}
+            <TextField.Slot px="1"></TextField.Slot>
+            <TextField.Slot pr="3">
+              <IconButton
+                size="1"
+                variant="ghost"
+                color="gray"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </IconButton>
+            </TextField.Slot>
+          </TextField.Root>
         </label>
       </Flex>
 

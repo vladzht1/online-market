@@ -43,8 +43,8 @@ export const DeleteUserModal: FC<IDeleteUserModalProps> = ({
       <AlertDialog.Content maxWidth="450px">
         <AlertDialog.Title>Удаление пользователя</AlertDialog.Title>
         <AlertDialog.Description size="2">
-          Вы уверены, что хотите удалить этого пользователя?{" "}
-          <strong>Отменить это действие будет невозможно!</strong>
+          Вы уверены, что хотите удалить этого пользователя? Отменить это
+          действие будет невозможно!
         </AlertDialog.Description>
 
         <Flex gap="3" mt="4" justify="end">

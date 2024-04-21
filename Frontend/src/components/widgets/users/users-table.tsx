@@ -4,6 +4,7 @@ import { FaInfoCircle, FaPen, FaTrash } from "react-icons/fa";
 import { useQuery } from "react-query";
 
 import { getAllUsers } from "../../../api/users";
+import { formatDateTimeString } from "../../../shared/formatters";
 import { MessageReceiver, MessageType } from "../../../shared/types";
 import { DeleteUserModal } from "../../features/users/delete-user-modal";
 import { EditUserModal } from "../../features/users/edit-user-modal";
@@ -65,7 +66,6 @@ export const UsersTable: FC<IUserTablePros> = ({ messageReceiver }) => {
                   <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
                 </Table.Row>
               </Table.Header>
-
               <Table.Body>
                 {data.data.map((user: any) => (
                   <Table.Row align="center" key={user.id}>
@@ -73,11 +73,11 @@ export const UsersTable: FC<IUserTablePros> = ({ messageReceiver }) => {
                     <Table.Cell>{`${user.lastName} ${user.firstName} ${user.middleName}`}</Table.Cell>
                     <Table.Cell>{user.login}</Table.Cell>
                     <Table.Cell>{user.email}</Table.Cell>
-                    <Table.Cell>
-                      {new Date(user.createdAt).toDateString()}
+                    <Table.Cell title={user.createdAt}>
+                      {formatDateTimeString(user.createdAt)}
                     </Table.Cell>
-                    <Table.Cell>
-                      {new Date(user.updatedAt).toDateString()}
+                    <Table.Cell title={user.updatedAt}>
+                      {formatDateTimeString(user.updatedAt)}
                     </Table.Cell>
                     <Table.Cell>
                       <EditUserModal user={user} callback={handleAction}>

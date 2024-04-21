@@ -1,11 +1,9 @@
-using System.ComponentModel;
 using LanguageExt.Common;
 
 using Market.Dtos.Users;
 using Market.Exceptions;
 using Market.Models;
 using Market.Repositories;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Market.Services;
 

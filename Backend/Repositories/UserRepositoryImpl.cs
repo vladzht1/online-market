@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 
 using Market.Database;
 using Market.Models;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using LanguageExt.SomeHelp;
 
 namespace Market.Repositories;
 
@@ -41,26 +43,19 @@ public class UserRepositoryImpl : IUserRepository
     {
         using var db = new ApplicationPostgresContext();
 
-        var result = db.Users.Update(user);
+        db.Entry(user).State = EntityState.Modified;
         await db.SaveChangesAsync();
 
-        return result.State == EntityState.Modified;
+        return true;
     }
 
     public async Task<bool> Delete(int userId)
     {
         using var db = new ApplicationPostgresContext();
 
-        var user = db.Users.Where(user => user.Id == userId).FirstOrDefault();
-
-        if (user == null)
-        {
-            return false;
-        }
-
-        var result = db.Users.Remove(user);
+        var deletedRows = db.Database.ExecuteSql($"DELETE FROM Users WHERE Id = {userId}");
         await db.SaveChangesAsync();
 
-        return result.State != EntityState.Unchanged;
+        return deletedRows > 0;
     }
 }

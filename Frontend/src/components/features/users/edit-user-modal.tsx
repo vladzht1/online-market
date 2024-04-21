@@ -26,6 +26,7 @@ export const EditUserModal: FC<IEditUserModalProps> = ({
 }) => {
   const [formState, setFormState] = useState({});
   const [dialogOpen, setDialogOpen] = useState(false);
+
   const { addMessage, getMessages, hasMessages } = useMessage();
 
   const { mutate, isSuccess, isError, error, reset } = useMutation(
@@ -33,7 +34,7 @@ export const EditUserModal: FC<IEditUserModalProps> = ({
   );
 
   if (isSuccess) {
-    callback?.("Пользователь успешно обновлён!", "SUCCESS", true);
+    callback?.("Пользователь успешно обновлён", "SUCCESS", true);
     reset();
   } else if (isError) {
     callback?.(

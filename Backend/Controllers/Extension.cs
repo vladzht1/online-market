@@ -26,8 +26,12 @@ public static class ControllerExtension
                 }
                 else if (exception is OperationFailedException)
                 {
-                    // TODO: Send 500 status code
-                    return new ObjectResult(new ReturnDto(StatusCodes.Status500InternalServerError, exception.Message).Content);
+                    var response = new ObjectResult(new ReturnDto(StatusCodes.Status500InternalServerError, exception.Message).Content)
+                    {
+                        StatusCode = StatusCodes.Status500InternalServerError
+                    };
+
+                    return response;
                 }
 
                 return new BadRequestObjectResult(new ReturnDto(400, exception.Message).Content);
