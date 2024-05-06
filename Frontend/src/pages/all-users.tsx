@@ -6,7 +6,7 @@ import { AddUserModal } from "../components/features/users/add-user-modal";
 import { ContainerWithPadding } from "../components/shared/container";
 import { Header } from "../components/widgets/header";
 import { UsersTable } from "../components/widgets/users/users-table";
-import { useMessage } from "../hooks/useMessage";
+import { useMessage } from "../hooks/use-message";
 import { MessageReceiver } from "../shared/types";
 
 export const AllUsersPage: FC = () => {
@@ -26,7 +26,7 @@ export const AllUsersPage: FC = () => {
     <>
       <Header />
       <ContainerWithPadding>
-        <Flex justify="between">
+        <Flex justify="between" align="center">
           <Text
             size="6"
             as="div"
@@ -36,7 +36,7 @@ export const AllUsersPage: FC = () => {
             Все пользователи
           </Text>
           <AddUserModal callback={messageReceiver}>
-            <Button variant="outline">Добавить</Button>
+            <Button variant="ghost">Добавить</Button>
           </AddUserModal>
         </Flex>
 

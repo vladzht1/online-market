@@ -1,4 +1,4 @@
-namespace Market.Exceptions;
+namespace MK.Exceptions;
 
 public class ResourceNotFoundException(string message) : Exception(message)
 {

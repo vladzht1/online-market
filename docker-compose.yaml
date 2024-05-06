@@ -12,14 +12,18 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+    networks:
+      - postgres
+
     restart: unless-stopped
-    network_mode: "host"
     ports:
       - "${PG_PORT}:${PG_PORT}"
-    expose:
-      - ${PG_PORT}
 
     command: -p ${PG_PORT}
+
+networks:
+  postgres:
+    driver: bridge
 
 volumes:
   postgres-data:

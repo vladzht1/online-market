@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Market.Models;
+namespace MK.Models;
 
 [Table(name: "users")]
 public class User : BaseEntity

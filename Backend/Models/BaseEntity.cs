@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Market.Models;
+namespace MK.Models;
 
 public class BaseEntity
 {

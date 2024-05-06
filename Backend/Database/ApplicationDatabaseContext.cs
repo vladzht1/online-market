@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 
-using Market.Models;
+using MK.Models;
 
-namespace Market.Database;
+namespace MK.Database;
 
 public class ApplicationPostgresContext : DbContext
 {
@@ -12,9 +12,19 @@ public class ApplicationPostgresContext : DbContext
     }
 
     public DbSet<User> Users { get; set; }
+    public DbSet<Market> Markets { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql($"Host=localhost;Port=5432;Database=online_market;Username=postgres;Password=postgres");
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder
+            .Entity<Market>()
+            .HasOne(market => market.OfficeAddress)
+            .WithOne()
+            .HasForeignKey<Address>(address => address.MarketId);
     }
 }

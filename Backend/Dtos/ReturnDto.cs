@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Market.Dtos;
+namespace MK.Dtos;
 
 public class ReturnDto
 {

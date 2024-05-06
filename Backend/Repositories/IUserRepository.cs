@@ -1,6 +1,6 @@
-using Market.Models;
+using MK.Models;
 
-namespace Market.Repositories;
+namespace MK.Repositories;
 
 public interface IUserRepository
 {

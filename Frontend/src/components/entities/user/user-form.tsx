@@ -10,11 +10,7 @@ interface IUserFormProps {
   onChange?: (updatedUser: User) => void;
 }
 
-export const UserForm: FC<IUserFormProps> = ({
-  children,
-  initialData,
-  onChange,
-}) => {
+export const UserForm: FC<IUserFormProps> = ({ children, initialData, onChange }) => {
   const [formState, setFormState] = useState<User>(
     initialData ?? {
       firstName: "",
@@ -105,12 +101,7 @@ export const UserForm: FC<IUserFormProps> = ({
             {/* This slot must be here to place the show password button on the right side */}
             <TextField.Slot px="1"></TextField.Slot>
             <TextField.Slot pr="3">
-              <IconButton
-                size="1"
-                variant="ghost"
-                color="gray"
-                onClick={() => setShowPassword(!showPassword)}
-              >
+              <IconButton size="1" variant="ghost" color="gray" onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </IconButton>
             </TextField.Slot>

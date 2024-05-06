@@ -1,4 +1,4 @@
-namespace Market.Dtos.Users;
+namespace MK.Dtos.Users;
 
 public class UpdateUserDto
 {

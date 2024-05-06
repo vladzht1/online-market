@@ -1,9 +1,9 @@
 using LanguageExt.Common;
 
-using Market.Dtos.Users;
-using Market.Models;
+using MK.Dtos.Users;
+using MK.Models;
 
-namespace Market.Services;
+namespace MK.Services;
 
 public interface IUserService
 {

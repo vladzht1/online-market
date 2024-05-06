@@ -1,4 +1,4 @@
-namespace Market.Models;
+namespace MK.Models;
 
 public class Order : BaseEntity
 {

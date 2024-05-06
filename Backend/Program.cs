@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc.Formatters;
 
-using Market.Dtos;
-using Market.Repositories;
-using Market.Services;
+using MK.Dtos;
+using MK.Repositories;
+using MK.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +17,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSingleton<IUserRepository>(new UserRepositoryImpl());
+builder.Services.AddSingleton<IMarketRepository>(new MarketRepositoryImpl());
+builder.Services.AddSingleton<IAddressRepository>(new AddressRepositoryImpl());
+
 builder.Services.AddSingleton<IUserService>(context => new UserServiceImpl(context.GetRequiredService<IUserRepository>()));
+builder.Services.AddSingleton<IMarketService>(context => new MarketServiceImpl(
+    context.GetRequiredService<IMarketRepository>(),
+    context.GetRequiredService<IAddressRepository>()
+));
 
 var app = builder.Build();
 
-// app.UseCors(builder => builder.AllowAnyOrigin());
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.Use(async (context, next) =>

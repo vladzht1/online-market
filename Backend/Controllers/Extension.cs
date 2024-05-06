@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using LanguageExt.Common;
 
-using Market.Dtos;
-using Market.Exceptions;
+using MK.Dtos;
+using MK.Exceptions;
 
-namespace Market.Controllers;
+namespace MK.Controllers;
 
 public static class ControllerExtension
 {

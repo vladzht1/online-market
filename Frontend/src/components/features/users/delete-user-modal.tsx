@@ -8,31 +8,17 @@ import { MessageType } from "../../../shared/types";
 interface IDeleteUserModalProps {
   children: ReactNode;
   userId: number;
-  callback?: (
-    message: string,
-    messageType: MessageType,
-    success: boolean
-  ) => void;
+  callback?: (message: string, messageType: MessageType, success: boolean) => void;
 }
 
-export const DeleteUserModal: FC<IDeleteUserModalProps> = ({
-  children,
-  userId,
-  callback,
-}) => {
-  const { mutate, isSuccess, isError, error, reset } = useMutation(
-    async (id: number) => await deleteUserById(id)
-  );
+export const DeleteUserModal: FC<IDeleteUserModalProps> = ({ children, userId, callback }) => {
+  const { mutate, isSuccess, isError, error, reset } = useMutation(async (id: number) => await deleteUserById(id));
 
   if (isSuccess) {
     callback?.("Пользователь успешно удалён!", "SUCCESS", true);
     reset();
   } else if (isError) {
-    callback?.(
-      (error as any).response?.data?.message ?? (error as any).message,
-      "ERROR",
-      false
-    );
+    callback?.((error as any).response?.data?.message ?? (error as any).message, "ERROR", false);
 
     reset();
   }
@@ -43,10 +29,8 @@ export const DeleteUserModal: FC<IDeleteUserModalProps> = ({
       <AlertDialog.Content maxWidth="450px">
         <AlertDialog.Title>Удаление пользователя</AlertDialog.Title>
         <AlertDialog.Description size="2">
-          Вы уверены, что хотите удалить этого пользователя? Отменить это
-          действие будет невозможно!
+          Вы уверены, что хотите удалить этого пользователя? Отменить это действие будет невозможно!
         </AlertDialog.Description>
-
         <Flex gap="3" mt="4" justify="end">
           <AlertDialog.Cancel>
             <Button variant="soft" color="gray">

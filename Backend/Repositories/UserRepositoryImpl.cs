@@ -1,32 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 
-using Market.Database;
-using Market.Models;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using LanguageExt.SomeHelp;
+using MK.Database;
+using MK.Models;
 
-namespace Market.Repositories;
+namespace MK.Repositories;
 
 public class UserRepositoryImpl : IUserRepository
 {
     public async Task<User[]> GetAll()
     {
         using var db = new ApplicationPostgresContext();
-        return [.. (await db.Users.ToArrayAsync())];
+        return await db.Users.ToArrayAsync();
     }
 
     public async Task<User?> GetUserById(int userId)
     {
         using var db = new ApplicationPostgresContext();
-
-        var user = await db.Users.Where(user => user.Id == userId).FirstOrDefaultAsync();
-
-        if (user == null)
-        {
-            return null;
-        }
-
-        return user;
+        return await db.Users.Where(user => user.Id == userId).FirstOrDefaultAsync();
     }
 
     public async Task<int?> Save(User user)

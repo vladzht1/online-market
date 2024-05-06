@@ -1,11 +1,11 @@
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Mvc;
 
-using Market.Models;
-using Market.Dtos.Users;
-using Market.Services;
+using MK.Models;
+using MK.Dtos.Users;
+using MK.Services;
 
-namespace Market.Controllers;
+namespace MK.Controllers;
 
 [ApiController]
 [Route("api/users")]

@@ -1,11 +1,11 @@
 using LanguageExt.Common;
 
-using Market.Dtos.Users;
-using Market.Exceptions;
-using Market.Models;
-using Market.Repositories;
+using MK.Dtos.Users;
+using MK.Exceptions;
+using MK.Models;
+using MK.Repositories;
 
-namespace Market.Services;
+namespace MK.Services;
 
 public class UserServiceImpl(IUserRepository userRepository) : IUserService
 {
