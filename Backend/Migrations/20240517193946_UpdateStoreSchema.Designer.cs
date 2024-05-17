@@ -3,6 +3,7 @@ using System;
 using MK.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationPostgresContext))]
-    partial class ApplicationPostgresContextModelSnapshot : ModelSnapshot
+    [Migration("20240517193946_UpdateStoreSchema")]
+    partial class UpdateStoreSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +83,7 @@ namespace Backend.Migrations
                     b.HasIndex("MarketId")
                         .IsUnique();
 
-                    b.ToTable("addresses", (string)null);
+                    b.ToTable("addresses");
                 });
 
             modelBuilder.Entity("MK.Models.Market", b =>
@@ -109,7 +112,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("markets", (string)null);
+                    b.ToTable("markets");
                 });
 
             modelBuilder.Entity("MK.Models.Order", b =>
@@ -152,7 +155,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Order", (string)null);
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("MK.Models.OrderPosition", b =>
@@ -189,7 +192,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("StoreId");
 
-                    b.ToTable("OrderPosition", (string)null);
+                    b.ToTable("OrderPosition");
                 });
 
             modelBuilder.Entity("MK.Models.Price", b =>
@@ -226,7 +229,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Price", (string)null);
+                    b.ToTable("Price");
                 });
 
             modelBuilder.Entity("MK.Models.Product", b =>
@@ -252,7 +255,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("MK.Models.ProductProperty", b =>
@@ -279,7 +282,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductProperty", (string)null);
+                    b.ToTable("ProductProperty");
                 });
 
             modelBuilder.Entity("MK.Models.Store", b =>
@@ -307,7 +310,7 @@ namespace Backend.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.ToTable("stores", (string)null);
+                    b.ToTable("stores");
                 });
 
             modelBuilder.Entity("MK.Models.User", b =>
@@ -359,7 +362,7 @@ namespace Backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("MK.Models.Address", b =>

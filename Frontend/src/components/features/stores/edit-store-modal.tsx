@@ -2,38 +2,37 @@ import { Box, Button, Callout, Dialog, Flex, Tabs } from "@radix-ui/themes";
 import { FC, useEffect, useState } from "react";
 import { useMutation } from "react-query";
 
-import { updateMarket } from "../../../api/markets";
+import { updateStore } from "../../../api/stores";
 import { useMessage } from "../../../hooks/use-message";
 import { Address } from "../../../models/address";
-import { Market, MarketWithAddress } from "../../../models/market";
+import { Store, StoreWithAddress } from "../../../models/store";
 import { IActionModalProps } from "../../../shared/types";
-import { validateAddressForm } from "../../../validators/address-form-validator";
-import { validateMarketForm } from "../../../validators/market-form-validator";
 import { AddressForm } from "../../entities/address/address-form";
-import { MarketForm } from "../../entities/market/market-form";
+import { StoreForm } from "../../entities/store/store-form";
 
-interface IEditMarketModalProps extends IActionModalProps {
-  market: MarketWithAddress;
+interface IEditStoreModalProps extends IActionModalProps {
+  store: StoreWithAddress;
 }
 
-export const EditMarketModal: FC<IEditMarketModalProps> = ({ children, market, callback }) => {
-  const [marketFormState, setMarketFormState] = useState<MarketWithAddress>(market);
-  const [addressFormState, setAddressFormState] = useState<Address>(market.officeAddress ?? {});
+export const EditStoreModal: FC<IEditStoreModalProps> = ({ children, store, callback }) => {
+  const [storeFormState, setStoreFormState] = useState<StoreWithAddress>(store);
+  const [addressFormState, setAddressFormState] = useState<Address>(store.address ?? {});
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const { addMessage, getMessages, hasMessages } = useMessage();
   const { mutate, isSuccess, isError, error, reset } = useMutation(
-    async (market: MarketWithAddress) => await updateMarket(market)
+    async (store: StoreWithAddress) => await updateStore(store)
   );
 
   useEffect(() => {
-    setMarketFormState(market);
-    setAddressFormState(market.officeAddress);
-  }, [market]);
+    // resetForm();
+    setStoreFormState(store);
+    setAddressFormState(store.address);
+  }, [store]);
 
   if (isSuccess) {
-    callback?.("Магазин успешно обновлён", "SUCCESS", true);
+    callback?.("Склад успешно обновлён", "SUCCESS", true);
     reset();
   } else if (isError) {
     callback?.((error as any).response?.data?.message ?? (error as any).message, "ERROR", false);
@@ -42,21 +41,21 @@ export const EditMarketModal: FC<IEditMarketModalProps> = ({ children, market, c
   }
 
   const handleSubmit = () => {
-    const marketValidationResult = validateMarketForm(marketFormState as Market);
-    const addressValidationResult = validateAddressForm(addressFormState as Address);
+    // const marketValidationResult = validateMarketForm(storeFormState as Store);
+    // const addressValidationResult = validateAddressForm(addressFormState as Address);
 
-    Object.values({
-      ...marketValidationResult.errors,
-      ...addressValidationResult.errors,
-    }).forEach((error) => addMessage(error, "ERROR"));
+    // Object.values({
+    //   ...marketValidationResult.errors,
+    //   ...addressValidationResult.errors,
+    // }).forEach((error) => addMessage(error, "ERROR"));
 
-    if (!marketValidationResult.isValid || !addressValidationResult.isValid) {
-      return;
-    }
+    // if (!marketValidationResult.isValid || !addressValidationResult.isValid) {
+    //   return;
+    // }
 
-    market.officeAddress = addressFormState;
+    store.address = addressFormState;
 
-    mutate(marketFormState);
+    mutate(storeFormState);
     setDialogOpen(false);
   };
 
@@ -64,7 +63,7 @@ export const EditMarketModal: FC<IEditMarketModalProps> = ({ children, market, c
     <Dialog.Root open={dialogOpen}>
       <Dialog.Trigger onClick={() => setDialogOpen(true)}>{children}</Dialog.Trigger>
       <Dialog.Content maxWidth="450px">
-        <Dialog.Title>Редактирование магазина</Dialog.Title>
+        <Dialog.Title>Редактирование склада</Dialog.Title>
 
         {hasMessages() && (
           <Flex direction="column" gap="2" mb="2">
@@ -77,17 +76,14 @@ export const EditMarketModal: FC<IEditMarketModalProps> = ({ children, market, c
           </Flex>
         )}
 
-        <Tabs.Root defaultValue="market-form">
+        <Tabs.Root defaultValue="store-form">
           <Tabs.List>
-            <Tabs.Trigger value="market-form">Общая информация</Tabs.Trigger>
-            <Tabs.Trigger value="address-form">Адрес офиса</Tabs.Trigger>
+            <Tabs.Trigger value="store-form">Общая информация</Tabs.Trigger>
+            <Tabs.Trigger value="address-form">Адрес</Tabs.Trigger>
           </Tabs.List>
           <Box pt="3">
-            <Tabs.Content value="market-form">
-              <MarketForm
-                initialData={marketFormState}
-                onChange={setMarketFormState as (updatedMarket: Market) => void}
-              />
+            <Tabs.Content value="store-form">
+              <StoreForm initialData={storeFormState} onChange={setStoreFormState as (updatedStore: Store) => void} />
             </Tabs.Content>
             <Tabs.Content value="address-form">
               <AddressForm initialData={addressFormState} onChange={setAddressFormState} />

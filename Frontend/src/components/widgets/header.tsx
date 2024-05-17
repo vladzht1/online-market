@@ -1,7 +1,7 @@
 import { Flex, Text } from "@radix-ui/themes";
 import { FC } from "react";
 
-import { HEADER_LINKS } from "../../constants/links";
+import { LINKS } from "../../constants/links";
 import { ContainerWithPadding } from "../shared/container";
 import { Link } from "../shared/link";
 
@@ -16,12 +16,8 @@ export const Header: FC = () => {
             </Text>
           </Link>
 
-          {HEADER_LINKS.map((link) => (
-            <Link
-              to={link.href}
-              key={link.label}
-              style={{ color: "var(--gray-1)" }}
-            >
+          {LINKS.map((link) => (
+            <Link to={link.href} key={link.label} style={{ color: "var(--gray-1)" }}>
               {link.label}
             </Link>
           ))}

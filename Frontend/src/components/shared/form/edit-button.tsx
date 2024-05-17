@@ -6,12 +6,10 @@ interface IEditButtonProps {
   onClick?: (event: any) => void;
 }
 
-export const EditButton: FC<IEditButtonProps> = ({ onClick }) => {
-  return (
-    <Tooltip content="Редактировать">
-      <IconButton onClick={onClick} color="teal" variant="soft">
-        <FaPen />
-      </IconButton>
-    </Tooltip>
-  );
-};
+export const EditButton: FC<IEditButtonProps> = ({ onClick }) => (
+  <Tooltip content="Редактировать">
+    <IconButton onClick={onClick} color="teal" variant="soft">
+      <FaPen />
+    </IconButton>
+  </Tooltip>
+);

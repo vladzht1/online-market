@@ -58,7 +58,7 @@ public class MarketRepositoryImpl : IMarketRepository
 
             if (deletedAddressRows == 0)
             {
-                Console.WriteLine("Market address deletion failed");
+                Console.WriteLine("Store address deletion failed");
                 return false;
             }
         }

@@ -1,20 +1,17 @@
 import { Button, Callout, Dialog, Flex } from "@radix-ui/themes";
-import { FC, ReactNode, useState } from "react";
-
+import { FC, useState } from "react";
 import { useMutation } from "react-query";
+
 import { createNewUser } from "../../../api/users";
 import { useMessage } from "../../../hooks/use-message";
 import { User } from "../../../models/user";
-import { MessageType } from "../../../shared/types";
+import { IActionModalProps } from "../../../shared/types";
 import { validateUserForm } from "../../../validators/user-form-validator";
 import { UserForm } from "../../entities/user/user-form";
 
-interface IAllUserModalProps {
-  children: ReactNode;
-  callback?: (message: string, messageType: MessageType, success: boolean) => void;
-}
+interface IAddUserModalProps extends IActionModalProps {}
 
-export const AddUserModal: FC<IAllUserModalProps> = ({ children, callback }) => {
+export const AddUserModal: FC<IAddUserModalProps> = ({ children, callback }) => {
   const [formState, setFormState] = useState({});
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -50,7 +47,6 @@ export const AddUserModal: FC<IAllUserModalProps> = ({ children, callback }) => 
   return (
     <Dialog.Root open={dialogOpen}>
       <Dialog.Trigger onClick={() => setDialogOpen(true)}>{children}</Dialog.Trigger>
-
       <Dialog.Content maxWidth="450px">
         <Dialog.Title>Добавление пользователя</Dialog.Title>
 

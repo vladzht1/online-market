@@ -6,12 +6,10 @@ interface IDeleteButtonProps {
   onClick?: (event: any) => void;
 }
 
-export const DeleteButton: FC<IDeleteButtonProps> = ({ onClick }) => {
-  return (
-    <Tooltip content="Удалить">
-      <IconButton onClick={onClick} color="red" variant="outline">
-        <FaTrash />
-      </IconButton>
-    </Tooltip>
-  );
-};
+export const DeleteButton: FC<IDeleteButtonProps> = ({ onClick }) => (
+  <Tooltip content="Удалить">
+    <IconButton onClick={onClick} color="red" variant="outline">
+      <FaTrash />
+    </IconButton>
+  </Tooltip>
+);

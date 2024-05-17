@@ -1,14 +1,12 @@
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { useMutation } from "react-query";
 
 import { deleteMarketById } from "../../../api/markets";
-import { MessageType } from "../../../shared/types";
+import { IActionModalProps } from "../../../shared/types";
 
-interface IDeleteMarketModalProps {
-  children: ReactNode;
+interface IDeleteMarketModalProps extends IActionModalProps {
   marketId: number;
-  callback?: (message: string, messageType: MessageType, success: boolean) => void;
 }
 
 export const DeleteMarketModal: FC<IDeleteMarketModalProps> = ({ children, marketId, callback }) => {
@@ -31,7 +29,6 @@ export const DeleteMarketModal: FC<IDeleteMarketModalProps> = ({ children, marke
         <AlertDialog.Description size="2">
           Вы уверены, что хотите удалить этот магазин? Отменить это действие будет невозможно!
         </AlertDialog.Description>
-
         <Flex gap="3" mt="4" justify="end">
           <AlertDialog.Cancel>
             <Button variant="soft" color="gray">

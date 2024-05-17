@@ -19,8 +19,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSingleton<IUserRepository>(new UserRepositoryImpl());
 builder.Services.AddSingleton<IMarketRepository>(new MarketRepositoryImpl());
 builder.Services.AddSingleton<IAddressRepository>(new AddressRepositoryImpl());
+builder.Services.AddSingleton<IStoreRepository>(new StoreRepositoryImpl());
 
 builder.Services.AddSingleton<IUserService>(context => new UserServiceImpl(context.GetRequiredService<IUserRepository>()));
+builder.Services.AddSingleton<IStoreService>(context => new StoreServiceImpl(
+    context.GetRequiredService<IStoreRepository>(),
+    context.GetRequiredService<IAddressRepository>()
+));
 builder.Services.AddSingleton<IMarketService>(context => new MarketServiceImpl(
     context.GetRequiredService<IMarketRepository>(),
     context.GetRequiredService<IAddressRepository>()

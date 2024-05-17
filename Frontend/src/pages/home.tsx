@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { ContainerWithPadding } from "../components/shared/container";
 import { Header } from "../components/widgets/header";
-import { HEADER_LINKS } from "../constants/links";
+import { LINKS } from "../constants/links";
 
 export const HomePage: FC = () => {
   const router = useNavigate();
@@ -24,12 +24,8 @@ export const HomePage: FC = () => {
           </Text>
           Пожалуйста, выберите таблицу и перейдите по соответствующей ссылке:
           <Flex gap="4" my="4">
-            {HEADER_LINKS.map((link) => (
-              <Button
-                color="blue"
-                onClick={() => redirectToTable(link.href)}
-                key={link.label}
-              >
+            {LINKS.map((link) => (
+              <Button color="blue" onClick={() => redirectToTable(link.href)} key={link.label}>
                 {link.label}
               </Button>
             ))}

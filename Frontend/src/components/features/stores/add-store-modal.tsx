@@ -1,65 +1,69 @@
 import { Box, Button, Callout, Dialog, Flex, Tabs } from "@radix-ui/themes";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useMutation } from "react-query";
 
-import { createNewMarket } from "../../../api/markets";
+import { createNewStore } from "../../../api/stores";
 import { useMessage } from "../../../hooks/use-message";
 import { Address } from "../../../models/address";
-import { Market } from "../../../models/market";
+import { Store } from "../../../models/store";
 import { isObjectEmpty } from "../../../shared/object";
 import { IActionModalProps } from "../../../shared/types";
-import { validateAddressForm } from "../../../validators/address-form-validator";
-import { validateMarketForm } from "../../../validators/market-form-validator";
 import { AddressForm } from "../../entities/address/address-form";
-import { MarketForm } from "../../entities/market/market-form";
+import { StoreForm } from "../../entities/store/store-form";
 
-interface IAddMarketModalProps extends IActionModalProps {}
+interface IAddStoreModalProps extends IActionModalProps {}
 
-export const AddMarketModal: FC<IAddMarketModalProps> = ({ children, callback }) => {
-  const [marketFormState, setMarketFormState] = useState({} as Market);
+export const AddStoreModal: FC<IAddStoreModalProps> = ({ children, callback }) => {
+  const [storeFormState, setStoreFormState] = useState({} as Store);
   const [addressFormState, setAddressFormState] = useState({} as Address);
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const { addMessage, getMessages, hasMessages } = useMessage();
   const { mutate, isSuccess, isError, error, reset } = useMutation(
-    async ({ market, address }: { market: Market; address: Address }) => await createNewMarket(market, address)
+    async ({ store, address }: { store: Store; address: Address }) => await createNewStore(store, address)
   );
 
-  if (isSuccess) {
-    callback?.("Магазин успешно добавлен", "SUCCESS", true);
-    reset();
-  } else if (isError) {
-    callback?.((error as any).response?.data?.message ?? (error as any).message, "ERROR", false);
+  useEffect(() => {
+    if (isSuccess) {
+      callback?.("Склад успешно создан!", "SUCCESS", true);
+      reset();
+      restoreFormState();
+    } else if (isError) {
+      callback?.((error as any).response?.data?.message ?? (error as any).message, "ERROR", false);
 
-    reset();
-  }
+      reset();
+    }
+  }, [callback, error, isError, isSuccess, reset]);
 
   const handleSubmit = () => {
-    const marketValidationResult = validateMarketForm(marketFormState as Market);
-    const addressValidationResult = validateAddressForm(addressFormState as Address);
+    // TODO: add validation
 
-    Object.values({
-      ...marketValidationResult.errors,
-      ...addressValidationResult.errors,
-    }).forEach((error) => addMessage(error, "ERROR"));
+    // const validationResult = validateStateForm(formState as Store);
 
-    if (!marketValidationResult.isValid || !addressValidationResult.isValid) {
-      return;
-    }
+    // Object.values(validationResult.errors).forEach((error) => addMessage(error, "ERROR"));
+
+    // if (!validationResult.isValid) {
+    //   return;
+    // }
 
     mutate({
-      market: marketFormState as Market,
+      store: storeFormState as Store,
       address: addressFormState as Address,
     });
     setDialogOpen(false);
+  };
+
+  const restoreFormState = () => {
+    setStoreFormState({} as Store);
+    setAddressFormState({} as Address);
   };
 
   return (
     <Dialog.Root open={dialogOpen}>
       <Dialog.Trigger onClick={() => setDialogOpen(true)}>{children}</Dialog.Trigger>
       <Dialog.Content maxWidth="450px">
-        <Dialog.Title>Добавление магазина</Dialog.Title>
+        <Dialog.Title>Добавление склада</Dialog.Title>
 
         {hasMessages() && (
           <Flex direction="column" gap="2" mb="2">
@@ -72,16 +76,16 @@ export const AddMarketModal: FC<IAddMarketModalProps> = ({ children, callback })
           </Flex>
         )}
 
-        <Tabs.Root defaultValue="market-form">
+        <Tabs.Root defaultValue="store-form">
           <Tabs.List>
-            <Tabs.Trigger value="market-form">Общая информация</Tabs.Trigger>
-            <Tabs.Trigger value="address-form">Адрес офиса</Tabs.Trigger>
+            <Tabs.Trigger value="store-form">Общая информация</Tabs.Trigger>
+            <Tabs.Trigger value="address-form">Адрес</Tabs.Trigger>
           </Tabs.List>
           <Box pt="3">
-            <Tabs.Content value="market-form">
-              <MarketForm
-                initialData={!isObjectEmpty(marketFormState) ? marketFormState : undefined}
-                onChange={setMarketFormState}
+            <Tabs.Content value="store-form">
+              <StoreForm
+                initialData={!isObjectEmpty(storeFormState) ? storeFormState : undefined}
+                onChange={setStoreFormState}
               />
             </Tabs.Content>
             <Tabs.Content value="address-form">

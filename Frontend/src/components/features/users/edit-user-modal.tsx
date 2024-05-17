@@ -1,18 +1,16 @@
 import { Button, Callout, Dialog, Flex } from "@radix-ui/themes";
-import { FC, ReactNode, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useMutation } from "react-query";
 
 import { updateUser } from "../../../api/users";
 import { useMessage } from "../../../hooks/use-message";
 import { User } from "../../../models/user";
-import { MessageType } from "../../../shared/types";
+import { IActionModalProps } from "../../../shared/types";
 import { validateUserForm } from "../../../validators/user-form-validator";
 import { UserForm } from "../../entities/user/user-form";
 
-interface IEditUserModalProps {
-  children: ReactNode;
+interface IEditUserModalProps extends IActionModalProps {
   user: User;
-  callback?: (message: string, messageType: MessageType, success: boolean) => void;
 }
 
 export const EditUserModal: FC<IEditUserModalProps> = ({ children, user, callback }) => {
@@ -21,6 +19,10 @@ export const EditUserModal: FC<IEditUserModalProps> = ({ children, user, callbac
 
   const { addMessage, getMessages, hasMessages } = useMessage();
   const { mutate, isSuccess, isError, error, reset } = useMutation(async (user: User) => await updateUser(user as any));
+
+  useEffect(() => {
+    setFormState(user);
+  }, [user]);
 
   if (isSuccess) {
     callback?.("Пользователь успешно обновлён", "SUCCESS", true);
@@ -51,7 +53,6 @@ export const EditUserModal: FC<IEditUserModalProps> = ({ children, user, callbac
   return (
     <Dialog.Root open={dialogOpen}>
       <Dialog.Trigger onClick={() => setDialogOpen(true)}>{children}</Dialog.Trigger>
-
       <Dialog.Content maxWidth="450px">
         <Dialog.Title>Редактирование пользователя</Dialog.Title>
 

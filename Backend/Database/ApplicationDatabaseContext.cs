@@ -13,6 +13,7 @@ public class ApplicationPostgresContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Market> Markets { get; set; }
+    public DbSet<Store> Stores { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

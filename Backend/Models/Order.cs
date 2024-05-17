@@ -26,4 +26,5 @@ public class OrderPosition : BaseEntity
     public Product Product { get; set; } = null!;
     public Order Order { get; set; } = null!;
     public Price Price { get; set; } = null!;
+    public int Quantity { get; set; }
 }

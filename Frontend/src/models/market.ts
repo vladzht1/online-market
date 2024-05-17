@@ -1,4 +1,4 @@
-import { Address } from "./address";
+import { WithAddress } from "../shared/types";
 
 export class Market {
   public id!: number;
@@ -7,6 +7,4 @@ export class Market {
   public links!: string[];
 }
 
-export type WithAddress = {
-  officeAddress: Address;
-}
+export type MarketWithAddress = Market & WithAddress<"officeAddress">;

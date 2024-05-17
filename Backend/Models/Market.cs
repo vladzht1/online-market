@@ -1,17 +1,66 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
+using MK.Helpers.Validators;
+
 namespace MK.Models;
 
 [Table(name: "markets")]
 public class Market : BaseEntity
 {
-    [Column(name: "name", TypeName = "varchar(127)")]
-    public string Name { get; set; } = string.Empty;
+    public Market(string name, string description, string[] links, Address officeAddress)
+    {
+        Name = name;
+        Description = description;
+        Links = links;
+        OfficeAddress = officeAddress;
+    }
 
-    [Column(name: "description", TypeName = "varchar(255)")]
-    public string Description { get; set; } = string.Empty;
+    private Market()
+    {
+    }
+
+    [Column(name: "name", TypeName = "varchar(128)")]
+    public string Name { get; private set; } = string.Empty;
+
+    [Column(name: "description", TypeName = "varchar(256)")]
+    public string Description { get; private set; } = string.Empty;
 
     [Column(name: "links")]
-    public string[] Links { get; set; } = [];
+    public string[] Links { get; private set; } = [];
     public Address OfficeAddress { get; set; } = null!;
+
+    public void UpdateName(string updatedName)
+    {
+        if (!StringValidator.IsNonEmpty(updatedName))
+        {
+            throw new ArgumentException("Name must not be empty");
+        }
+
+        if (Name == updatedName)
+        {
+            return;
+        }
+
+        Name = updatedName;
+    }
+
+    public void UpdateDescription(string updatedDescription)
+    {
+        if (!StringValidator.IsNonEmpty(updatedDescription))
+        {
+            throw new ArgumentException("Description must not be empty");
+        }
+
+        if (Description == updatedDescription)
+        {
+            return;
+        }
+
+        Description = updatedDescription;
+    }
+
+    public void UpdateLinks(string[] updatedLinks)
+    {
+        Links = updatedLinks;
+    }
 }

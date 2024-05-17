@@ -2,6 +2,7 @@ using LanguageExt.Common;
 
 using MK.Dtos.Markets;
 using MK.Exceptions;
+using MK.Helpers.AddressHelpers;
 using MK.Models;
 using MK.Repositories;
 using MK.Services;
@@ -42,13 +43,7 @@ public class MarketServiceImpl(IMarketRepository marketRepository, IAddressRepos
             Comment = createMarketDto.address.comment,
         };
 
-        var market = new Market()
-        {
-            Name = createMarketDto.name,
-            Description = createMarketDto.description,
-            Links = createMarketDto.links,
-            OfficeAddress = address
-        };
+        var market = new Market(createMarketDto.name, createMarketDto.description, createMarketDto.links, address);
 
         int? savedMarketId = await _marketRepository.Save(market);
 
@@ -57,7 +52,7 @@ public class MarketServiceImpl(IMarketRepository marketRepository, IAddressRepos
             return new Result<Market>(new OperationFailedException("Не удалось создать магазин"));
         }
 
-        return (await _marketRepository.GetMarketById((int)savedMarketId!))!;
+        return market;
     }
 
     public async Task<Result<Market>> Update(UpdateMarketDto updateMarketDto)
@@ -69,18 +64,24 @@ public class MarketServiceImpl(IMarketRepository marketRepository, IAddressRepos
             return new Result<Market>(new ResourceNotFoundException("Такой магазин не существует"));
         }
 
-        market.Name = updateMarketDto.name ?? market.Name;
-        market.Description = updateMarketDto.description ?? market.Description;
-        market.Links = updateMarketDto.links ?? market.Links;
+        market.UpdateName(updateMarketDto.name ?? market.Name);
+        market.UpdateDescription(updateMarketDto.description ?? market.Description);
+        market.UpdateLinks(updateMarketDto.links ?? market.Links);
 
-        market.OfficeAddress.CountryCode  = updateMarketDto.address?.countryCode  ?? market.OfficeAddress.CountryCode;
-        market.OfficeAddress.Region       = updateMarketDto.address?.region       ?? market.OfficeAddress.Region;
-        market.OfficeAddress.City         = updateMarketDto.address?.city         ?? market.OfficeAddress.City;
-        market.OfficeAddress.Street       = updateMarketDto.address?.street       ?? market.OfficeAddress.Street;
-        market.OfficeAddress.Building     = updateMarketDto.address?.building     ?? market.OfficeAddress.Building;
-        market.OfficeAddress.Apartment    = updateMarketDto.address?.apartment    ?? market.OfficeAddress.Apartment;
-        market.OfficeAddress.AddressIndex = updateMarketDto.address?.addressIndex ?? market.OfficeAddress.AddressIndex;
-        market.OfficeAddress.Comment      = updateMarketDto.address?.comment      ?? market.OfficeAddress.Comment;
+        if (updateMarketDto.address != null)
+        {
+            AddressHelpers.UpdateAddress(market.OfficeAddress, updateMarketDto.address);
+        }
+
+        // TODO: remove
+        // market.OfficeAddress.CountryCode  = updateMarketDto.address?.countryCode  ?? market.OfficeAddress.CountryCode;
+        // market.OfficeAddress.Region       = updateMarketDto.address?.region       ?? market.OfficeAddress.Region;
+        // market.OfficeAddress.City         = updateMarketDto.address?.city         ?? market.OfficeAddress.City;
+        // market.OfficeAddress.Street       = updateMarketDto.address?.street       ?? market.OfficeAddress.Street;
+        // market.OfficeAddress.Building     = updateMarketDto.address?.building     ?? market.OfficeAddress.Building;
+        // market.OfficeAddress.Apartment    = updateMarketDto.address?.apartment    ?? market.OfficeAddress.Apartment;
+        // market.OfficeAddress.AddressIndex = updateMarketDto.address?.addressIndex ?? market.OfficeAddress.AddressIndex;
+        // market.OfficeAddress.Comment      = updateMarketDto.address?.comment      ?? market.OfficeAddress.Comment;
 
         bool updatedAddress = await _addressRepository.Update(market.OfficeAddress);
         bool updatedMarket = await _marketRepository.Update(market);

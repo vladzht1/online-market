@@ -1,26 +1,24 @@
 import { Button, Callout, HoverCard, Table } from "@radix-ui/themes";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { useQuery } from "react-query";
 
-import { getAllMarkets } from "../../../api/markets";
-import { MarketWithAddress } from "../../../models/market";
+import { getAllStores } from "../../../api/stores";
+import { StoreWithAddress } from "../../../models/store";
 import { MessageReceiver, MessageType } from "../../../shared/types";
 import { AddressDataList } from "../../entities/address/address-data-list";
-import { DeleteMarketModal } from "../../features/markets/delete-market-modal";
-import { EditMarketModal } from "../../features/markets/edit-market-modal";
+import { DeleteStoreModal } from "../../features/stores/delete-store-modal";
+import { EditStoreModal } from "../../features/stores/edit-store-modal";
 import { DeleteButton } from "../../shared/form/delete-button";
 import { EditButton } from "../../shared/form/edit-button";
 import { LoadingArea } from "../../shared/loading-area";
 
-interface IMarketsTableProps {
+interface IStoresTableProps {
   messageReceiver?: MessageReceiver;
 }
 
-export const MarketsTable: FC<IMarketsTableProps> = ({ messageReceiver }) => {
-  const [messageSent, setMessageSent] = useState(false);
-
-  const { data, isFetching, isError, error } = useQuery("markets", async () => await getAllMarkets(), {
+export const StoresTable: FC<IStoresTableProps> = ({ messageReceiver }) => {
+  const { data, isFetching, isError, error, remove } = useQuery("stores", async () => await getAllStores(), {
     keepPreviousData: true,
   });
 
@@ -29,11 +27,11 @@ export const MarketsTable: FC<IMarketsTableProps> = ({ messageReceiver }) => {
   }
 
   useEffect(() => {
-    if (!isFetching && isError && !messageSent) {
+    if (!isFetching && isError) {
       messageReceiver?.((error as any).response?.data?.message || (error as any).message, "ERROR", false);
-      setMessageSent(true);
+      remove();
     }
-  }, [error, isError, isFetching, messageReceiver, messageSent]);
+  }, [error, isError, isFetching, messageReceiver, remove]);
 
   const handleAction = (message: string, messageType: MessageType, success: boolean) => {
     messageReceiver?.(message, messageType, success);
@@ -51,43 +49,43 @@ export const MarketsTable: FC<IMarketsTableProps> = ({ messageReceiver }) => {
                 <Table.Row>
                   <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Название</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Описание</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Ссылки</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Загруженность</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Адрес</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body>
-                {data.data.map((market: MarketWithAddress) => (
-                  <Table.Row align="center" key={market.id}>
-                    <Table.RowHeaderCell>{market.id}</Table.RowHeaderCell>
-                    <Table.Cell>{market.name}</Table.Cell>
+                {data.data.map((store: StoreWithAddress) => (
+                  <Table.Row align="center" key={store.id}>
+                    <Table.RowHeaderCell>{store.id}</Table.RowHeaderCell>
+                    <Table.Cell>{store.label}</Table.Cell>
                     <Table.Cell>
-                      <span title={market.description}>{market.description.substring(0, 20)}...</span>
+                      <span title={`${store.loaded} из ${store.capacity}`}>
+                        {(store.loaded / store.capacity) * 100}%
+                      </span>
                     </Table.Cell>
-                    <Table.Cell>{market.links}</Table.Cell>
                     <Table.Cell>
-                      {market.officeAddress && (
+                      {store.address && (
                         <HoverCard.Root>
                           <HoverCard.Trigger>
                             <Button variant="ghost">Посмотреть адрес</Button>
                           </HoverCard.Trigger>
                           <HoverCard.Content maxWidth="300px">
-                            <AddressDataList address={market.officeAddress} />
+                            <AddressDataList address={store.address} />
                           </HoverCard.Content>
                         </HoverCard.Root>
                       )}
                     </Table.Cell>
                     <Table.Cell>
-                      <EditMarketModal market={market} callback={handleAction}>
+                      <EditStoreModal store={store} callback={handleAction}>
                         <EditButton />
-                      </EditMarketModal>
+                      </EditStoreModal>
                     </Table.Cell>
                     <Table.Cell>
-                      <DeleteMarketModal marketId={market.id} callback={handleAction}>
+                      <DeleteStoreModal storeId={store.id} callback={handleAction}>
                         <DeleteButton />
-                      </DeleteMarketModal>
+                      </DeleteStoreModal>
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -98,7 +96,7 @@ export const MarketsTable: FC<IMarketsTableProps> = ({ messageReceiver }) => {
               <Callout.Icon>
                 <FaInfoCircle />
               </Callout.Icon>
-              <Callout.Text>Список магазинов пуст</Callout.Text>
+              <Callout.Text>Список складов пуст</Callout.Text>
             </Callout.Root>
           )}
         </>

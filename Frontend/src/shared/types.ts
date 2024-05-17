@@ -1,3 +1,7 @@
+import { ReactNode } from "react";
+
+import { Address } from "../models/address";
+
 export type MessageContent = {
   description: string,
   type: MessageType
@@ -10,4 +14,13 @@ export type MessageReceiver = (message: string, messageType: MessageType, succes
 export type ValidationResult = {
   isValid: boolean,
   errors: Record<string, string>
+}
+
+export type WithAddress<T extends string> = {
+  [key in T]: Address
+}
+
+export interface IActionModalProps {
+  children: ReactNode;
+  callback?: (message: string, messageType: MessageType, success: boolean) => void;
 }
