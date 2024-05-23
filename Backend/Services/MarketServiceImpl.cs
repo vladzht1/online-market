@@ -73,16 +73,6 @@ public class MarketServiceImpl(IMarketRepository marketRepository, IAddressRepos
             AddressHelpers.UpdateAddress(market.OfficeAddress, updateMarketDto.address);
         }
 
-        // TODO: remove
-        // market.OfficeAddress.CountryCode  = updateMarketDto.address?.countryCode  ?? market.OfficeAddress.CountryCode;
-        // market.OfficeAddress.Region       = updateMarketDto.address?.region       ?? market.OfficeAddress.Region;
-        // market.OfficeAddress.City         = updateMarketDto.address?.city         ?? market.OfficeAddress.City;
-        // market.OfficeAddress.Street       = updateMarketDto.address?.street       ?? market.OfficeAddress.Street;
-        // market.OfficeAddress.Building     = updateMarketDto.address?.building     ?? market.OfficeAddress.Building;
-        // market.OfficeAddress.Apartment    = updateMarketDto.address?.apartment    ?? market.OfficeAddress.Apartment;
-        // market.OfficeAddress.AddressIndex = updateMarketDto.address?.addressIndex ?? market.OfficeAddress.AddressIndex;
-        // market.OfficeAddress.Comment      = updateMarketDto.address?.comment      ?? market.OfficeAddress.Comment;
-
         bool updatedAddress = await _addressRepository.Update(market.OfficeAddress);
         bool updatedMarket = await _marketRepository.Update(market);
 

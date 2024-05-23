@@ -6,6 +6,10 @@ using MK.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
+
 builder.Services.AddCors();
 
 builder.Services.AddControllers(options =>
@@ -20,8 +24,10 @@ builder.Services.AddSingleton<IUserRepository>(new UserRepositoryImpl());
 builder.Services.AddSingleton<IMarketRepository>(new MarketRepositoryImpl());
 builder.Services.AddSingleton<IAddressRepository>(new AddressRepositoryImpl());
 builder.Services.AddSingleton<IStoreRepository>(new StoreRepositoryImpl());
+builder.Services.AddSingleton<IProductRepository>(new ProductRepositoryImpl());
 
 builder.Services.AddSingleton<IUserService>(context => new UserServiceImpl(context.GetRequiredService<IUserRepository>()));
+builder.Services.AddSingleton<IProductService>(context => new ProductServiceImpl(context.GetRequiredService<IProductRepository>()));
 builder.Services.AddSingleton<IStoreService>(context => new StoreServiceImpl(
     context.GetRequiredService<IStoreRepository>(),
     context.GetRequiredService<IAddressRepository>()

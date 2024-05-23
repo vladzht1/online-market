@@ -14,6 +14,7 @@ public class ApplicationPostgresContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Market> Markets { get; set; }
     public DbSet<Store> Stores { get; set; }
+    public DbSet<Product> Products { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -22,10 +23,23 @@ public class ApplicationPostgresContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-            .Entity<Market>()
-            .HasOne(market => market.OfficeAddress)
-            .WithOne()
-            .HasForeignKey<Address>(address => address.MarketId);
+        modelBuilder.Entity<Market>(entity => {
+            entity
+                .HasOne(market => market.OfficeAddress)
+                .WithOne()
+                .HasForeignKey<Address>(address => address.MarketId);
+        });
+
+        modelBuilder.Entity<Product>(entity => {
+            entity
+                .HasMany(product => product.Properties)
+                .WithOne(property => property.Product)
+                .HasForeignKey(property => property.ProductId);
+
+            entity
+                .HasMany(product => product.Images)
+                .WithOne(image => image.Product)
+                .HasForeignKey(image => image.ProductId);
+        });
     }
 }
