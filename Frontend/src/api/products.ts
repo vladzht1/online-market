@@ -7,7 +7,7 @@ export const getAllProducts = () => {
   return http.get(BASE_URL);
 }
 
-export const getProductById = (productId: number): Promise<Product | null> => {
+export const getProductById = (productId: number) => {
   return http.get(`${BASE_URL}/${productId}`);
 }
 

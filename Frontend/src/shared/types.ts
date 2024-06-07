@@ -22,5 +22,5 @@ export type WithAddress<T extends string> = {
 
 export interface IActionModalProps {
   children: ReactNode;
-  callback?: (message: string, messageType: MessageType, success: boolean) => void;
+  callback?: MessageReceiver;
 }

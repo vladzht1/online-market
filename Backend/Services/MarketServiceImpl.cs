@@ -7,26 +7,40 @@ using MK.Models;
 using MK.Repositories;
 using MK.Services;
 
-public class MarketServiceImpl(IMarketRepository marketRepository, IAddressRepository addressRepository) : IMarketService
+public class MarketServiceImpl(
+    IMarketRepository marketRepository,
+    IAddressRepository addressRepository,
+    IMarketProductRepository marketProductRepository
+) : IMarketService
 {
     private readonly IMarketRepository _marketRepository = marketRepository;
     private readonly IAddressRepository _addressRepository = addressRepository;
+    private readonly IMarketProductRepository _marketProductRepository = marketProductRepository;
 
     public Task<Market[]> GetAll()
     {
         return _marketRepository.GetAll();
     }
 
-    public async Task<Result<Market>> GetMarketById(int marketId)
+    public async Task<Result<MarketDto>> GetById(int marketId)
     {
-        Market? market = await _marketRepository.GetMarketById(marketId);
+        Market? market = await _marketRepository.GetById(marketId);
 
         if (market == null)
         {
-            return new Result<Market>(new ResourceNotFoundException("Магазин не найден"));
+            return new Result<MarketDto>(new ResourceNotFoundException("Магазин не найден"));
         }
 
-        return market;
+        AvailableProduct[] marketProducts = await _marketProductRepository.GetAll(new() { MarketId = marketId });
+
+        return new MarketDto() {
+            Id = market.Id,
+            Name = market.Name,
+            Description = market.Description,
+            Links = market.Links,
+            OfficeAddress = market.OfficeAddress,
+            Products = marketProducts.ToList()
+        };
     }
 
     public async Task<Result<Market>> Create(CreateMarketDto createMarketDto)
@@ -57,7 +71,7 @@ public class MarketServiceImpl(IMarketRepository marketRepository, IAddressRepos
 
     public async Task<Result<Market>> Update(UpdateMarketDto updateMarketDto)
     {
-        Market? market = await _marketRepository.GetMarketById(updateMarketDto.id);
+        Market? market = await _marketRepository.GetById(updateMarketDto.id);
 
         if (market == null)
         {

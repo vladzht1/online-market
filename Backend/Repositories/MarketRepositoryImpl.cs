@@ -2,7 +2,8 @@ using Microsoft.EntityFrameworkCore;
 
 using MK.Database;
 using MK.Models;
-using MK.Repositories;
+
+namespace MK.Repositories;
 
 public class MarketRepositoryImpl : IMarketRepository
 {
@@ -12,7 +13,7 @@ public class MarketRepositoryImpl : IMarketRepository
         return await db.Markets.Include(market => market.OfficeAddress).ToArrayAsync();
     }
 
-    public async Task<Market?> GetMarketById(int marketId)
+    public async Task<Market?> GetById(int marketId)
     {
         using var db = new ApplicationPostgresContext();
         return await db.Markets
@@ -43,7 +44,7 @@ public class MarketRepositoryImpl : IMarketRepository
 
     public async Task<bool> Delete(int marketId)
     {
-        Market? market = await GetMarketById(marketId);
+        Market? market = await GetById(marketId);
 
         if (market == null)
         {

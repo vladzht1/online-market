@@ -2,6 +2,7 @@ import { Button, Callout, HoverCard, Table } from "@radix-ui/themes";
 import { FC, useEffect, useState } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 
 import { getAllMarkets } from "../../../api/markets";
 import { MarketWithAddress } from "../../../models/market";
@@ -62,7 +63,9 @@ export const MarketsTable: FC<IMarketsTableProps> = ({ messageReceiver }) => {
                 {data.data.map((market: MarketWithAddress) => (
                   <Table.Row align="center" key={market.id}>
                     <Table.RowHeaderCell>{market.id}</Table.RowHeaderCell>
-                    <Table.Cell>{market.name}</Table.Cell>
+                    <Table.Cell>
+                      <Link to={`/markets/${market.id}`}>{market.name}</Link>
+                    </Table.Cell>
                     <Table.Cell>
                       <span title={market.description}>{market.description.substring(0, 20)}...</span>
                     </Table.Cell>

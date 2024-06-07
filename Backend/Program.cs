@@ -25,6 +25,7 @@ builder.Services.AddSingleton<IMarketRepository>(new MarketRepositoryImpl());
 builder.Services.AddSingleton<IAddressRepository>(new AddressRepositoryImpl());
 builder.Services.AddSingleton<IStoreRepository>(new StoreRepositoryImpl());
 builder.Services.AddSingleton<IProductRepository>(new ProductRepositoryImpl());
+builder.Services.AddSingleton<IMarketProductRepository>(new MarketProductRepositoryImpl());
 
 builder.Services.AddSingleton<IUserService>(context => new UserServiceImpl(context.GetRequiredService<IUserRepository>()));
 builder.Services.AddSingleton<IProductService>(context => new ProductServiceImpl(context.GetRequiredService<IProductRepository>()));
@@ -34,8 +35,16 @@ builder.Services.AddSingleton<IStoreService>(context => new StoreServiceImpl(
 ));
 builder.Services.AddSingleton<IMarketService>(context => new MarketServiceImpl(
     context.GetRequiredService<IMarketRepository>(),
-    context.GetRequiredService<IAddressRepository>()
+    context.GetRequiredService<IAddressRepository>(),
+    context.GetRequiredService<IMarketProductRepository>()
 ));
+builder.Services.AddSingleton<IMarketProductService>(context => new MarketProductServiceImpl(
+    context.GetRequiredService<IMarketProductRepository>(),
+    context.GetRequiredService<IProductRepository>(),
+    context.GetRequiredService<IStoreRepository>(),
+    context.GetRequiredService<IMarketRepository>()
+));
+
 
 var app = builder.Build();
 

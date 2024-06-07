@@ -8,7 +8,7 @@ namespace MK.Services;
 public interface IMarketService
 {
     public Task<Market[]> GetAll();
-    public Task<Result<Market>> GetMarketById(int marketId);
+    public Task<Result<MarketDto>> GetById(int marketId);
     public Task<Result<Market>> Create(CreateMarketDto createMarketDto);
     public Task<Result<Market>> Update(UpdateMarketDto updateMarketDto);
     public Task<Result<bool>> Delete(int marketId);

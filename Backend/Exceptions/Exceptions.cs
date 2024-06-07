@@ -1,5 +1,9 @@
 namespace MK.Exceptions;
 
+public class BadInputException(string message) : Exception(message)
+{
+}
+
 public class ResourceNotFoundException(string message) : Exception(message)
 {
 }

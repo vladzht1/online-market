@@ -8,7 +8,7 @@ export const getAllMarkets = () => {
   return http.get(BASE_URL);
 }
 
-export const getMarketById = (marketId: number): Promise<MarketWithAddress | null> => {
+export const getMarketById = (marketId: number) => {
   return http.get(`${BASE_URL}/${marketId}`);
 }
 

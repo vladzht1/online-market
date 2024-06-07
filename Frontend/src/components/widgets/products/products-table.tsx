@@ -2,6 +2,7 @@ import { Button, Callout, DataList, HoverCard, Popover, Table } from "@radix-ui/
 import { FC, useEffect } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 
 import { getAllProducts } from "../../../api/products";
 import { Product, ProductProperty } from "../../../models/product";
@@ -59,7 +60,9 @@ export const ProductsTable: FC<IProductsTableProps> = ({ messageReceiver }) => {
                 {data.data.map((product: Product) => (
                   <Table.Row align="center" key={product.id}>
                     <Table.RowHeaderCell>{product.id}</Table.RowHeaderCell>
-                    <Table.Cell>{product.name}</Table.Cell>
+                    <Table.Cell>
+                      <Link to={`/products/${product.id}`}>{product.name}</Link>
+                    </Table.Cell>
                     <Table.Cell>{product.description}</Table.Cell>
                     <Table.Cell>
                       {product.properties && product.properties.length > 0 && (

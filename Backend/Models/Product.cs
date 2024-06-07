@@ -132,11 +132,27 @@ public class ProductProperty : BaseEntity
     public int ProductId { get; private set; }
 }
 
+[Table(name: "available_products")]
 public class AvailableProduct : BaseEntity
 {
-    public Store Store { get; set; } = null!;
-    public Market Market { get; set; } = null!;
-    public Price Price { get; set; } = null!;
-    public Product Product { get; set; } = null!;
-    public int Quantity { get; set; }
+    public AvailableProduct(Store store, Market market, Price price, Product product, int quantity)
+    {
+        Store = store;
+        Market = market;
+        Price = price;
+        Product = product;
+        Quantity = quantity;
+    }
+
+    private AvailableProduct()
+    {
+    }
+
+    public Store Store { get; private set; } = null!;
+    public Market Market { get; private set; } = null!;
+    public Price Price { get; private set; } = null!;
+    public Product Product { get; private set; } = null!;
+
+    [Column(name: "quantity")]
+    public int Quantity { get; private set; }
 }

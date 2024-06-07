@@ -21,7 +21,7 @@ public class MarketController(IMarketService marketService) : ControllerBase
     [HttpGet("{marketId}")]
     public async Task<IActionResult> GetOne(int marketId)
     {
-        var result = await _marketService.GetMarketById(marketId);
+        var result = await _marketService.GetById(marketId);
         return result.ToActionResult(market => market);
     }
 
