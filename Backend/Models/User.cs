@@ -28,4 +28,6 @@ public class User : BaseEntity
 
     [Column("updated_at")]
     public DateTime UpdatedAt { get; set; }
+
+    public Address DeliveryAddress { get; set; } = null!;
 }

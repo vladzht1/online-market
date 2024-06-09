@@ -3,6 +3,7 @@ using System;
 using MK.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationPostgresContext))]
-    partial class ApplicationPostgresContextModelSnapshot : ModelSnapshot
+    [Migration("20240608215016_AddressAtUserSchema")]
+    partial class AddressAtUserSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -360,6 +363,10 @@ namespace Backend.Migrations
                     b.Property<int>("AddressId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Capacity")
+                        .HasColumnType("integer")
+                        .HasColumnName("capacity");
+
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasColumnType("text")
@@ -519,7 +526,7 @@ namespace Backend.Migrations
                         .IsRequired();
 
                     b.HasOne("MK.Models.Store", "Store")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("StoreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -612,6 +619,11 @@ namespace Backend.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("MK.Models.Store", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

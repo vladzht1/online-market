@@ -6,6 +6,5 @@ public class UpdateStoreDto
 {
     public int Id { get; set; }
     public string? Label { get; set; }
-    public int? Capacity { get; set; }
     public UpdateAddressDto? Address { get; set; }
 }

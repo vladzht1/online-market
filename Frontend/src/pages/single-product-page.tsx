@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import { ContainerWithPadding } from "../components/shared/container";
 import { Header } from "../components/widgets/header";
 import { ProductInfo } from "../components/widgets/products/product-info";

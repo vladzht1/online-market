@@ -8,12 +8,9 @@ namespace MK.Models;
 
 public class Store : BaseEntity
 {
-    private List<OrderPosition> _products = [];
-
-    public Store(string label, int capacity, Address address)
+    public Store(string label, Address address)
     {
         Label = label;
-        Capacity = capacity;
         Address = address;
     }
 
@@ -24,12 +21,7 @@ public class Store : BaseEntity
     [Column("label")]
     public string Label { get; set; } = string.Empty;
 
-    [Column("capacity")]
-    public int Capacity { get; set; }
-    public int Loaded { get => _products.Aggregate(0, (accumulator, product) => accumulator + product.Quantity); }
-
     public Address Address { get; set; } = null!;
-    public IReadOnlyList<OrderPosition> Products { get => _products.AsReadOnly(); }
 
     public bool UpdateLabel(string updatedLabel)
     {
@@ -45,15 +37,5 @@ public class Store : BaseEntity
 
         Label = updatedLabel;
         return true;
-    }
-
-    public bool CanLoadProduct(int amount)
-    {
-        return GetFreeSpace() >= amount;
-    }
-
-    public int GetFreeSpace()
-    {
-        return Capacity - Loaded;
     }
 }

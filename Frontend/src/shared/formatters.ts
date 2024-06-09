@@ -1,3 +1,18 @@
+import { OrderStatus } from "../models/order";
+
+const ORDER_STATUS_TEXTS: Record<OrderStatus, string> = {
+  [OrderStatus.CREATED]: "Создано",
+  [OrderStatus.PACKING]: "Собирается",
+  [OrderStatus.IN_DELIVERY]: "В доставке",
+  [OrderStatus.DELIVERED]: "Доставлено",
+  [OrderStatus.CANCELLED_BY_USER]: "Отменено",
+  [OrderStatus.CANCELLED_BY_SELLER]: "Отменено продавцом",
+}
+
+export const getOrderStatusText = (status: OrderStatus): string => {
+  return ORDER_STATUS_TEXTS[status];
+}
+
 export const formatDateTimeString = (date: Date | string): string => {
   const normalizedDate = typeof date === "string" ? new Date(date) : date;
 

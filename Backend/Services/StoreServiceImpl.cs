@@ -43,7 +43,7 @@ public class StoreServiceImpl(IStoreRepository storeRepository, IAddressReposito
             Comment = createStoreDto.Address.comment,
         };
 
-        var store = new Store(createStoreDto.Label, createStoreDto.Capacity, address);
+        var store = new Store(createStoreDto.Label, address);
 
         int? savedStoreId = await _storeRepository.Save(store);
 

@@ -1,6 +1,8 @@
 # TODO
 
-- create orders
+- change order status
+- FIX: invalid market at order
+- change product price
 
 - remove list of primitives from models (1st normal form)
 

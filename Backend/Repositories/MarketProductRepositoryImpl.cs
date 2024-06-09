@@ -12,34 +12,17 @@ public class MarketProductRepositoryImpl : IMarketProductRepository
     {
         using var db = new ApplicationPostgresContext();
 
-        var result = db.AvailableProducts;
-
-        if (marketProductSearchQueryDto.Id != null)
-        {
-            result.Where(p => p.Id == marketProductSearchQueryDto.Id);
-        }
-
-        if (marketProductSearchQueryDto.ProductId != null)
-        {
-            result.Where(p => p.Product.Id == marketProductSearchQueryDto.ProductId);
-        }
-
-        if (marketProductSearchQueryDto.MarketId != null)
-        {
-            result.Where(p => p.Market.Id == marketProductSearchQueryDto.MarketId);
-        }
-
-        if (marketProductSearchQueryDto.StoreId != null)
-        {
-            result.Where(p => p.Store.Id == marketProductSearchQueryDto.StoreId);
-        }
-
-        return await result
+        var result = db.AvailableProducts
+            .Where(p => marketProductSearchQueryDto.Id == null || p.Id == marketProductSearchQueryDto.Id)
+            .Where(p => marketProductSearchQueryDto.ProductId == null || p.Product.Id == marketProductSearchQueryDto.ProductId)
+            .Where(p => marketProductSearchQueryDto.MarketId == null || p.Market.Id == marketProductSearchQueryDto.MarketId)
+            .Where(p => marketProductSearchQueryDto.StoreId == null || p.Store.Id == marketProductSearchQueryDto.StoreId)
             .Include(product => product.Market)
             .Include(product => product.Product)
             .Include(product => product.Price)
-            .Include(product => product.Store)
-            .ToArrayAsync();
+            .Include(product => product.Store);
+
+        return await result.ToArrayAsync();
     }
 
     public async Task<AvailableProduct?> GetById(int marketProductId)

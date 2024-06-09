@@ -3,6 +3,7 @@ using System;
 using MK.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationPostgresContext))]
-    partial class ApplicationPostgresContextModelSnapshot : ModelSnapshot
+    [Migration("20240608120504_Orders")]
+    partial class Orders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -176,6 +179,9 @@ namespace Backend.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
+                    b.Property<int>("StoreId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
@@ -184,6 +190,8 @@ namespace Backend.Migrations
                     b.HasIndex("AddressForDeliveryId");
 
                     b.HasIndex("MarketId");
+
+                    b.HasIndex("StoreId");
 
                     b.HasIndex("UserId");
 
@@ -212,7 +220,7 @@ namespace Backend.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.Property<int>("StoreId")
+                    b.Property<int?>("StoreId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -360,6 +368,10 @@ namespace Backend.Migrations
                     b.Property<int>("AddressId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Capacity")
+                        .HasColumnType("integer")
+                        .HasColumnName("capacity");
+
                     b.Property<string>("Label")
                         .IsRequired()
                         .HasColumnType("text")
@@ -384,9 +396,6 @@ namespace Backend.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
-
-                    b.Property<int>("DeliveryAddressId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -423,8 +432,6 @@ namespace Backend.Migrations
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DeliveryAddressId");
 
                     b.ToTable("users");
                 });
@@ -485,6 +492,12 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MK.Models.Store", "Store")
+                        .WithMany()
+                        .HasForeignKey("StoreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MK.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -494,6 +507,8 @@ namespace Backend.Migrations
                     b.Navigation("AddressForDelivery");
 
                     b.Navigation("Market");
+
+                    b.Navigation("Store");
 
                     b.Navigation("User");
                 });
@@ -518,19 +533,15 @@ namespace Backend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MK.Models.Store", "Store")
-                        .WithMany()
-                        .HasForeignKey("StoreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("MK.Models.Store", null)
+                        .WithMany("Products")
+                        .HasForeignKey("StoreId");
 
                     b.Navigation("Order");
 
                     b.Navigation("Price");
 
                     b.Navigation("Product");
-
-                    b.Navigation("Store");
                 });
 
             modelBuilder.Entity("MK.Models.Price", b =>
@@ -585,17 +596,6 @@ namespace Backend.Migrations
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("MK.Models.User", b =>
-                {
-                    b.HasOne("MK.Models.Address", "DeliveryAddress")
-                        .WithMany()
-                        .HasForeignKey("DeliveryAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DeliveryAddress");
-                });
-
             modelBuilder.Entity("MK.Models.Market", b =>
                 {
                     b.Navigation("OfficeAddress")
@@ -612,6 +612,11 @@ namespace Backend.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("MK.Models.Store", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

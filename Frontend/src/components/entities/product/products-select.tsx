@@ -6,7 +6,7 @@ import { getAllProducts } from "../../../api/products";
 import { Product } from "../../../models/product";
 
 interface IProductsSelectProps {
-  onChange?: (market: Product | null) => void;
+  onChange?: (product: Product | null) => void;
   disabled?: boolean;
 }
 

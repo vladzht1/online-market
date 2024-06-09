@@ -49,7 +49,6 @@ export const StoresTable: FC<IStoresTableProps> = ({ messageReceiver }) => {
                 <Table.Row>
                   <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Название</Table.ColumnHeaderCell>
-                  <Table.ColumnHeaderCell>Загруженность</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Адрес</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
@@ -60,11 +59,6 @@ export const StoresTable: FC<IStoresTableProps> = ({ messageReceiver }) => {
                   <Table.Row align="center" key={store.id}>
                     <Table.RowHeaderCell>{store.id}</Table.RowHeaderCell>
                     <Table.Cell>{store.label}</Table.Cell>
-                    <Table.Cell>
-                      <span title={`${store.loaded} из ${store.capacity}`}>
-                        {(store.loaded / store.capacity) * 100}%
-                      </span>
-                    </Table.Cell>
                     <Table.Cell>
                       {store.address && (
                         <HoverCard.Root>

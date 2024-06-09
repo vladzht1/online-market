@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { LINKS } from "../constants/links";
 import { HomePage } from "../pages/home";
 import { MarketExpandedPage } from "../pages/market-expanded";
+import { SingleOrderPage } from "../pages/single-order-page";
 import { SingleProductPage } from "../pages/single-product-page";
 
 export const rootRouter = createBrowserRouter([
@@ -21,5 +22,9 @@ export const rootRouter = createBrowserRouter([
   {
     path: "/products/:productId",
     element: <SingleProductPage />,
+  },
+  {
+    path: "/orders/:orderId",
+    element: <SingleOrderPage />,
   },
 ]);

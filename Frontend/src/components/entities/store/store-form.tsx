@@ -14,8 +14,6 @@ export const StoreForm: FC<IStoreFormProps> = ({ children, initialData, onChange
     initialData ?? {
       id: -1,
       label: "",
-      capacity: 1,
-      loaded: 0,
     }
   );
 
@@ -38,18 +36,6 @@ export const StoreForm: FC<IStoreFormProps> = ({ children, initialData, onChange
             value={formState.label}
             onChange={(event) => setValue("label", event.target.value)}
             placeholder="Название"
-          />
-        </label>
-        <label>
-          <Text as="div" size="2" mb="1" weight="bold">
-            Вместимость
-          </Text>
-          <TextField.Root
-            type="number"
-            min={1}
-            value={formState.capacity}
-            onChange={(event) => setValue("capacity", event.target.value)}
-            placeholder="Вместимость"
           />
         </label>
       </Flex>

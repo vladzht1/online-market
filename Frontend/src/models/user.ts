@@ -1,4 +1,7 @@
+import { WithAddress } from "../shared/types";
+
 export class User {
+  public id!: number;
   public firstName!: string;
   public middleName!: string;
   public lastName!: string;
@@ -8,3 +11,5 @@ export class User {
   public createdAt!: Date;
   public updatedAt!: Date;
 }
+
+export type UserWithAddress = User & WithAddress<"deliveryAddress">;

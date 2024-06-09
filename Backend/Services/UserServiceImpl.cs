@@ -30,6 +30,18 @@ public class UserServiceImpl(IUserRepository userRepository) : IUserService
 
     public async Task<Result<User>> Create(CreateUserDto createUserDto)
     {
+        var address = new Address()
+        {
+            CountryCode = createUserDto.address.countryCode,
+            Region = createUserDto.address.region,
+            City = createUserDto.address.city,
+            Street = createUserDto.address.street,
+            Building = createUserDto.address.building,
+            Apartment = createUserDto.address.apartment,
+            AddressIndex = createUserDto.address.addressIndex,
+            Comment = createUserDto.address.comment,
+        };
+
         var user = new User()
         {
             FirstName = createUserDto.firstName,
@@ -39,7 +51,8 @@ public class UserServiceImpl(IUserRepository userRepository) : IUserService
             Email = createUserDto.email,
             Password = createUserDto.password,
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
+            DeliveryAddress = address
         };
 
         int? savedUserId = await _userRepository.Save(user);

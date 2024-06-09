@@ -1,8 +1,8 @@
-import { Box, Flex, Separator, Text } from "@radix-ui/themes";
+import { Box, Flex, Text } from "@radix-ui/themes";
 import { FC, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-
 import styled from "styled-components";
+
 import { getProductById } from "../../../api/products";
 import { Product } from "../../../models/product";
 import { MessageReceiver } from "../../../shared/types";
@@ -57,7 +57,7 @@ export const ProductInfo: FC<IProductInfoProps> = ({ productId, redirectBack }) 
       <LoadingArea show={isFetching && !product} />
 
       {product && (
-        <Flex gap="2">
+        <Flex gap="5">
           <ImageSlider images={product.images.map((image) => image.url)} size={500} />
 
           <Box width="100%">

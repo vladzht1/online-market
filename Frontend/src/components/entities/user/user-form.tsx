@@ -13,6 +13,7 @@ interface IUserFormProps {
 export const UserForm: FC<IUserFormProps> = ({ children, initialData, onChange }) => {
   const [formState, setFormState] = useState<User>(
     initialData ?? {
+      id: -1,
       firstName: "",
       middleName: "",
       lastName: "",

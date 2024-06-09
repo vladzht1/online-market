@@ -30,6 +30,7 @@ public class Address : BaseEntity
     [Column("comment")]
     public string Comment { get; set; } = string.Empty;
 
+    // TODO: remove
     [Column("market_id")]
     public int? MarketId { get; set; }
 }

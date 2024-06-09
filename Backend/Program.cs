@@ -26,9 +26,15 @@ builder.Services.AddSingleton<IAddressRepository>(new AddressRepositoryImpl());
 builder.Services.AddSingleton<IStoreRepository>(new StoreRepositoryImpl());
 builder.Services.AddSingleton<IProductRepository>(new ProductRepositoryImpl());
 builder.Services.AddSingleton<IMarketProductRepository>(new MarketProductRepositoryImpl());
+builder.Services.AddSingleton<IOrderRepository>(new OrderRepositoryImpl());
 
 builder.Services.AddSingleton<IUserService>(context => new UserServiceImpl(context.GetRequiredService<IUserRepository>()));
 builder.Services.AddSingleton<IProductService>(context => new ProductServiceImpl(context.GetRequiredService<IProductRepository>()));
+builder.Services.AddSingleton<IOrderService>(context => new OrderServiceImpl(
+    context.GetRequiredService<IOrderRepository>(),
+    context.GetRequiredService<IUserRepository>(),
+    context.GetRequiredService<IMarketProductRepository>()
+));
 builder.Services.AddSingleton<IStoreService>(context => new StoreServiceImpl(
     context.GetRequiredService<IStoreRepository>(),
     context.GetRequiredService<IAddressRepository>()

@@ -16,6 +16,8 @@ public class ApplicationPostgresContext : DbContext
     public DbSet<Store> Stores { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<AvailableProduct> AvailableProducts { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderPosition> OrderPositions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -41,6 +43,13 @@ public class ApplicationPostgresContext : DbContext
                 .HasMany(product => product.Images)
                 .WithOne(image => image.Product)
                 .HasForeignKey(image => image.ProductId);
+        });
+
+        modelBuilder.Entity<Order>(entity => {
+            entity
+                .HasMany(order => order.ProductPositions)
+                .WithOne(orderPosition => orderPosition.Order)
+                .HasForeignKey(orderPosition => orderPosition.OrderId);
         });
     }
 }

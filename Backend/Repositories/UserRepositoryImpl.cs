@@ -10,13 +10,18 @@ public class UserRepositoryImpl : IUserRepository
     public async Task<User[]> GetAll()
     {
         using var db = new ApplicationPostgresContext();
-        return await db.Users.ToArrayAsync();
+        return await db.Users
+            .Include(user => user.DeliveryAddress)
+            .ToArrayAsync();
     }
 
     public async Task<User?> GetUserById(int userId)
     {
         using var db = new ApplicationPostgresContext();
-        return await db.Users.Where(user => user.Id == userId).FirstOrDefaultAsync();
+        return await db.Users
+            .Include(user => user.DeliveryAddress)
+            .Where(user => user.Id == userId)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<int?> Save(User user)
