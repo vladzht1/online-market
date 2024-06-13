@@ -3,6 +3,8 @@ using LanguageExt.Common;
 
 using MK.Dtos.Order;
 using MK.Services;
+using MK.Models;
+using MK.Mappers;
 
 namespace MK.Controllers;
 
@@ -23,6 +25,18 @@ public class OrderController(IOrderService orderService) : ControllerBase
     {
         var result = await _orderService.GetById(orderId);
         return result.ToActionResult(order => order);
+    }
+
+    [HttpGet("statuses")]
+    public async Task<IActionResult> GetAllStatuses()
+    {
+        return Ok(await _orderService.GetAllOrderStatuses());
+    }
+
+    [HttpGet("statuses/{statusKey}")]
+    public async Task<IActionResult> GetStatusByKey(int statusKey)
+    {
+        return Ok(await _orderService.GetOrderStatusByKey(OrderStatusMapper.FromInt(statusKey)));
     }
 
     [HttpPost("")]

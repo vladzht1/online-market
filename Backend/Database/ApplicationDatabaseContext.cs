@@ -17,6 +17,7 @@ public class ApplicationPostgresContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<AvailableProduct> AvailableProducts { get; set; }
     public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderStatus> OrderStatuses { get; set; }
     public DbSet<OrderPosition> OrderPositions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

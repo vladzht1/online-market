@@ -16,7 +16,14 @@ export class Order {
   public deliveredAt!: Date | null;
 }
 
-export enum OrderStatus {
+export class OrderStatus {
+  public id!: number;
+  public label!: string;
+  public labelRus!: string;
+  public key!: OrderStatusKey;
+}
+
+export enum OrderStatusKey {
   CREATED,
   PACKING,
   IN_DELIVERY,

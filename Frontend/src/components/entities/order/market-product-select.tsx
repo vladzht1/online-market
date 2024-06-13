@@ -16,14 +16,23 @@ export const MarketProductSelect: FC<IMarketProductSelectProps> = ({ availablePr
     onChange(activeProduct);
   }, [activeProduct, onChange]);
 
+  const handleChange = (id: string) => {
+    for (const product of availableProducts) {
+      if (product.id === parseInt(id)) {
+        console.log(product);
+        setActiveProduct(product);
+      }
+    }
+  };
+
   return (
-    <Select.Root defaultValue="apple">
+    <Select.Root onValueChange={(id) => handleChange(id)}>
       <Select.Trigger />
       <Select.Content variant="soft">
         <Select.Group>
           <Select.Label>Продукты</Select.Label>
           {availableProducts.map((product) => (
-            <Select.Item value={product.id + ""} onChange={() => setActiveProduct(product)}>
+            <Select.Item value={product.id + ""} key={product.id}>
               {product.product.name} - {product.price.value} {product.price.currency}({product.market.name})
             </Select.Item>
           ))}

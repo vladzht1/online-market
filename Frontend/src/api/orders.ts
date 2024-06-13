@@ -8,6 +8,10 @@ export const getAllOrders = () => {
   return http.get(BASE_URL);
 }
 
+export const getAllOrderStatuses = () => {
+  return http.get(`${BASE_URL}/statuses`);
+}
+
 export const getOrderById = (orderId: number) => {
   return http.get(`${BASE_URL}/${orderId}`);
 }
@@ -20,6 +24,7 @@ export const createNewOrder = (orderData: OrderPositionType[], userId: number) =
 }
 
 export const updateOrder = (orderData: Partial<Order> & { id: number }) => {
+  console.log(orderData);
   return http.patch(BASE_URL, {
     ...orderData,
   });

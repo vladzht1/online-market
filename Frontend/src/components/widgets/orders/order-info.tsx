@@ -1,12 +1,13 @@
 import { Button, Flex, Heading, HoverCard, Table, Text } from "@radix-ui/themes";
 import { FC, useEffect, useState } from "react";
 import { useQuery } from "react-query";
-
 import { Link } from "react-router-dom";
+
 import { getOrderById } from "../../../api/orders";
 import { Order } from "../../../models/order";
-import { getOrderStatusText } from "../../../shared/formatters";
+import { formatDateTimeString } from "../../../shared/formatters";
 import { AddressDataList } from "../../entities/address/address-data-list";
+import { ChangeOrderStatus } from "../../features/orders/change-order-status";
 import { DeleteOrderModal } from "../../features/orders/delete-order-modal";
 import { DeleteButton } from "../../shared/form/delete-button";
 import { LoadingArea } from "../../shared/loading-area";
@@ -22,8 +23,6 @@ export const OrderInfo: FC<IOrderInfoProps> = ({ orderId, redirectBack }) => {
   });
 
   const [order, setOrder] = useState<Order | null>(null);
-
-  console.log(order);
 
   useEffect(() => {
     if (isError) {
@@ -68,13 +67,17 @@ export const OrderInfo: FC<IOrderInfoProps> = ({ orderId, redirectBack }) => {
           <Text as="div">
             Заказано пользователем: {order.user.firstName} {order.user.middleName} {order.user.lastName}
           </Text>
-
           <Text as="div">
-            Заказ из магазина:
-            <Link to={`/markets/${order.market.id}`}>{order.market.name}</Link>
+            Заказ из магазина: <Link to={`/markets/${order.market.id}`}>{order.market.name}</Link>
+          </Text>
+          <Text as="div">Последнее обновление: {formatDateTimeString(order.lastStatusUpdated)}</Text>
+          <Text as="div">
+            Дата доставки: {order.deliveredAt ? formatDateTimeString(order.deliveredAt) : "Не доставлено"}
           </Text>
 
-          <Text as="div">Статус заказа: {getOrderStatusText(order.status)}</Text>
+          <Text as="div">
+            Статус заказа: <ChangeOrderStatus initialValue={order.status} orderId={orderId} />
+          </Text>
 
           <HoverCard.Root>
             <HoverCard.Trigger style={{ marginTop: "0.5rem" }}>
@@ -97,7 +100,7 @@ export const OrderInfo: FC<IOrderInfoProps> = ({ orderId, redirectBack }) => {
             </Table.Header>
             <Table.Body>
               {order.productPositions.map((product) => (
-                <Table.Row>
+                <Table.Row key={product.id}>
                   <Table.RowHeaderCell>{product.id}</Table.RowHeaderCell>
                   <Table.Cell>
                     <Link to={`/products/${product.product.id}`}>{product.product.name}</Link>

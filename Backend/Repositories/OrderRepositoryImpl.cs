@@ -13,6 +13,7 @@ public class OrderRepositoryImpl : IOrderRepository
         return await db.Orders
             .Include(order => order.User)
             .Include(order => order.Market)
+            .Include(order => order.Status)
             .Include(order => order.AddressForDelivery)
             .Include(order => order.ProductPositions)
                 .ThenInclude(orderPosition => orderPosition.Product)
@@ -30,6 +31,7 @@ public class OrderRepositoryImpl : IOrderRepository
             .Where(order => order.Id == orderId)
             .Include(order => order.User)
             .Include(order => order.Market)
+            .Include(order => order.Status)
             .Include(order => order.AddressForDelivery)
             .Include(order => order.ProductPositions)
                 .ThenInclude(orderPosition => orderPosition.Product)
@@ -37,6 +39,20 @@ public class OrderRepositoryImpl : IOrderRepository
                 .ThenInclude(orderPosition => orderPosition.Store)
             .Include(order => order.ProductPositions)
                 .ThenInclude(orderPosition => orderPosition.Price)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<OrderStatus[]> GetAllOrderStatuses()
+    {
+        using var db = new ApplicationPostgresContext();
+        return await db.OrderStatuses.ToArrayAsync();
+    }
+
+    public async Task<OrderStatus?> GetOrderStatusByKey(OrderStatusKey key)
+    {
+        using var db = new ApplicationPostgresContext();
+        return await db.OrderStatuses
+            .Where(status => status.Key == key)
             .FirstOrDefaultAsync();
     }
 
@@ -48,6 +64,7 @@ public class OrderRepositoryImpl : IOrderRepository
         db.ChangeTracker.Context.Attach(order.AddressForDelivery);
         db.ChangeTracker.Context.Attach(order.Market);
         db.ChangeTracker.Context.Attach(order.User);
+        db.ChangeTracker.Context.Attach(order.Status);
 
         var result = await db.Orders.AddAsync(order);
         await db.SaveChangesAsync();
@@ -81,7 +98,9 @@ public class OrderRepositoryImpl : IOrderRepository
             return false;
         }
 
+        db.Entry(order.Status).State = EntityState.Unchanged;
         db.Entry(order).State = EntityState.Modified;
+
         await db.SaveChangesAsync();
 
         return true;
@@ -99,7 +118,10 @@ public class OrderRepositoryImpl : IOrderRepository
 
         using var db = new ApplicationPostgresContext();
 
+        // Avoid status deletion when order is deleted
+        db.Entry(order.Status).State = EntityState.Detached;
         db.Entry(order).State = EntityState.Deleted;
+
         await db.SaveChangesAsync();
 
         return true;

@@ -1,7 +1,5 @@
 # TODO
 
-- change order status
-- FIX: invalid market at order
 - change product price
 
 - remove list of primitives from models (1st normal form)
@@ -9,3 +7,8 @@
 <!-- This task should be the last one -->
 
 - raw sql implemented queries (from 5th lab)
+- [ ] Выбрать всех пользователей с длиной имени больше 5 символов
+- [ ] Выбрать все заказы, сделанные за последние 2 дня из магазина Эльдорадо
+- [ ] Выбрать все склады, на которых хранит товары `DNS`
+- [ ] Выбрать все товары, купленные из магазина ‘Эльдорадо’
+- [ ] Выбрать все такие товары, которые лежат на складе, который называется “Склад 3”

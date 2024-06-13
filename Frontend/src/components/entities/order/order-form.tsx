@@ -21,23 +21,14 @@ interface IOrderFormProps {
 }
 
 export const OrderForm: FC<IOrderFormProps> = ({ children, onChange }) => {
-  const { data, isFetching, isError, error } = useQuery(
-    "available-products",
-    async () => await getAllMarketProducts(),
-    {
-      keepPreviousData: true,
-    }
-  );
-
-  if (data) {
-    console.log(data);
-  }
+  const { data } = useQuery("available-products", async () => await getAllMarketProducts(), {
+    keepPreviousData: true,
+  });
 
   const [formState, setFormState] = useState<OrderPositionType[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   useEffect(() => {
-    console.log({ formState });
     onChange?.(formState, selectedUser);
   }, [formState, onChange, selectedUser]);
 

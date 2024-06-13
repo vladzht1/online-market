@@ -6,9 +6,10 @@ import { Link } from "react-router-dom";
 
 import { getAllOrders } from "../../../api/orders";
 import { Order } from "../../../models/order";
-import { formatDateTimeString, getOrderStatusText } from "../../../shared/formatters";
+import { formatDateTimeString } from "../../../shared/formatters";
 import { MessageReceiver, MessageType } from "../../../shared/types";
 import { AddressDataList } from "../../entities/address/address-data-list";
+import { ChangeOrderStatus } from "../../features/orders/change-order-status";
 import { DeleteOrderModal } from "../../features/orders/delete-order-modal";
 import { DeleteButton } from "../../shared/form/delete-button";
 import { LoadingArea } from "../../shared/loading-area";
@@ -18,13 +19,9 @@ interface IOrdersTableProps {
 }
 
 export const OrdersTable: FC<IOrdersTableProps> = ({ messageReceiver }) => {
-  const { data, isFetching, isError, error, remove } = useQuery("orders", async () => await getAllOrders(), {
+  const { data, isFetching, isError, error, remove, refetch } = useQuery("orders", async () => await getAllOrders(), {
     keepPreviousData: true,
   });
-
-  if (data) {
-    console.log(data);
-  }
 
   useEffect(() => {
     if (!isFetching && isError) {
@@ -53,6 +50,7 @@ export const OrdersTable: FC<IOrdersTableProps> = ({ messageReceiver }) => {
                   <Table.ColumnHeaderCell>Магазин</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Статус</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell>Последнее обновление</Table.ColumnHeaderCell>
+                  <Table.ColumnHeaderCell>Дата и время доставки</Table.ColumnHeaderCell>
                   <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
                 </Table.Row>
               </Table.Header>
@@ -76,8 +74,13 @@ export const OrdersTable: FC<IOrdersTableProps> = ({ messageReceiver }) => {
                     <Table.Cell>
                       <Link to={`/markets/${order.market.id}`}>{order.market.name}</Link>
                     </Table.Cell>
-                    <Table.Cell>{getOrderStatusText(order.status)}</Table.Cell>
+                    <Table.Cell>
+                      <ChangeOrderStatus initialValue={order.status} orderId={order.id} onChange={() => refetch()} />
+                    </Table.Cell>
                     <Table.Cell>{formatDateTimeString(order.lastStatusUpdated)}</Table.Cell>
+                    <Table.Cell>
+                      {order.deliveredAt ? formatDateTimeString(order.deliveredAt) : "Не доставлено"}
+                    </Table.Cell>
                     <Table.Cell>
                       <DeleteOrderModal orderId={order.id} callback={handleAction}>
                         <DeleteButton />

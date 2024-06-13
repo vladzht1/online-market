@@ -22,6 +22,11 @@ public class OrderServiceImpl(
         return await _orderRepository.GetAll();
     }
 
+    public async Task<OrderStatus[]> GetAllOrderStatuses()
+    {
+        return await _orderRepository.GetAllOrderStatuses();
+    }
+
     public async Task<Result<Order>> GetById(int orderId)
     {
         var order = await _orderRepository.GetById(orderId);
@@ -32,6 +37,18 @@ public class OrderServiceImpl(
         }
 
         return order;
+    }
+
+    public async Task<Result<OrderStatus>> GetOrderStatusByKey(OrderStatusKey key)
+    {
+        var orderStatus = await _orderRepository.GetOrderStatusByKey(key);
+
+        if (orderStatus == null)
+        {
+            return new Result<OrderStatus>(new ResourceNotFoundException("Статус заказа не найден"));
+        }
+
+        return orderStatus;
     }
 
     public async Task<Result<Order>> Create(CreateOrderDto createOrderDto)
@@ -59,33 +76,33 @@ public class OrderServiceImpl(
 
         }
 
-        foreach (var a in orderedMarketProducts)
+        OrderStatus? createdOrderStatus = await _orderRepository.GetOrderStatusByKey(OrderStatusKey.CREATED);
+
+        if (createdOrderStatus == null)
         {
-            Console.WriteLine(a.product.Market.Name);
+            return new Result<Order>(new OperationFailedException("Не удалось получить статус заказа"));
         }
 
-        var positions = orderedMarketProducts.GroupBy(position => position.product.Market);
+        Dictionary<Market, List<MarketProductOrderPosition>> positions = GroupPositionsByMarket(orderedMarketProducts);
 
         Order? lastOrder = null;
 
         foreach (var position in positions)
         {
-            if (position.ToList().Count == 0)
+            if (position.Value.Count == 0)
             {
                 continue;
             }
 
-            // FIXME: invalid market
-            var order = new Order(position.ToList()[0].product.Market, user.DeliveryAddress, user);
+            var order = new Order(position.Key, user.DeliveryAddress, user, createdOrderStatus);
+            lastOrder = order;
 
             if (await _orderRepository.Save(order) == null)
             {
                 return new Result<Order>(new OperationFailedException("Не удалось сохранить заказ"));
             }
 
-            lastOrder = order;
-
-            foreach (var productOfMarket in position)
+            foreach (var productOfMarket in position.Value)
             {
                 var orderPosition = new OrderPosition(
                     productOfMarket.product.Product,
@@ -97,8 +114,6 @@ public class OrderServiceImpl(
 
                 order.ProductPositions.Add(orderPosition);
                 await _orderRepository.SaveOrderPosition(orderPosition);
-
-
             }
         }
 
@@ -110,9 +125,32 @@ public class OrderServiceImpl(
         return lastOrder;
     }
 
-    public Task<Result<Order>> Update(UpdateOrderDto updateOrderDto)
+    public async Task<Result<Order>> Update(UpdateOrderDto updateOrderDto)
     {
-        throw new NotImplementedException();
+        Order? order = await _orderRepository.GetById(updateOrderDto.id);
+
+        if (order == null)
+        {
+            return new Result<Order>(new ResourceNotFoundException("Заказ не найден"));
+        }
+
+        if (updateOrderDto.status != null)
+        {
+            if (updateOrderDto.status.Key == OrderStatusKey.DELIVERED)
+            {
+                order.MarkAsDelivered(updateOrderDto.status);
+            }
+            else
+            {
+                order.SetStatus(updateOrderDto.status);
+            }
+        }
+
+        if (await _orderRepository.Update(order) == false) {
+            return new Result<Order>(new OperationFailedException("Не удалось обновить заказ"));
+        }
+
+        return order;
     }
 
     public async Task<Result<bool>> Delete(int orderId)
@@ -125,6 +163,25 @@ public class OrderServiceImpl(
         }
 
         return true;
+    }
+
+    private Dictionary<Market, List<MarketProductOrderPosition>> GroupPositionsByMarket(List<MarketProductOrderPosition> positions)
+    {
+        Dictionary<Market, List<MarketProductOrderPosition>> result = [];
+
+        foreach (var position in positions)
+        {
+            if (result.TryGetValue(position.product.Market, out List<MarketProductOrderPosition>? value))
+            {
+                value.Add(position);
+            }
+            else
+            {
+                result.TryAdd(position.product.Market, [position]);
+            }
+        }
+
+        return result;
     }
 
     // Temp entity, don't use anywhere
