@@ -148,11 +148,22 @@ public class AvailableProduct : BaseEntity
     {
     }
 
+    public bool DecreaseQuantity(int delta)
+    {
+        if (delta < 1 || delta > Quantity)
+        {
+            return false;
+        }
+
+        Quantity -= delta;
+        return true;
+    }
+
     public Store Store { get; private set; } = null!;
     public Market Market { get; private set; } = null!;
     public Price Price { get; private set; } = null!;
     public Product Product { get; private set; } = null!;
 
     [Column(name: "quantity")]
-    public int Quantity { get; private set; }
+    public int Quantity { get; set; }
 }

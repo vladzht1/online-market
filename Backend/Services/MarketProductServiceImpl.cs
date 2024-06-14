@@ -80,9 +80,25 @@ public class MarketProductServiceImpl(
         return marketProduct;
     }
 
-    public Task<Result<AvailableProduct>> Update(UpdateMarketProductDto updateMarketProductDto)
+    public async Task<Result<AvailableProduct>> Update(UpdateMarketProductDto updateMarketProductDto)
     {
-        throw new NotImplementedException();
+        AvailableProduct? product = await _marketProductRepository.GetById(updateMarketProductDto.Id);
+
+        if (product == null)
+        {
+            return new Result<AvailableProduct>(new ResourceNotFoundException("Такой товар не существует"));
+        }
+
+        if (updateMarketProductDto.Quantity != null)
+        {
+            product.Quantity = (int) updateMarketProductDto.Quantity;
+        }
+
+        if (await _marketProductRepository.Update(product) == false) {
+            return new Result<AvailableProduct>(new OperationFailedException("Не удалось обновить продукт"));
+        }
+
+        return product;
     }
 
     public async Task<Result<bool>> Delete(int marketProductId)

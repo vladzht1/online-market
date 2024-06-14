@@ -77,8 +77,15 @@ public class OrderServiceImpl(
                 continue;
             }
 
-            orderedMarketProducts.Add(new MarketProductOrderPosition(marketProduct, marketProductPosition.quantity));
+            int deltaQuantity = Math.Min(marketProductPosition.quantity, marketProduct.Quantity);
+            bool success = marketProduct.DecreaseQuantity(deltaQuantity);
 
+            if (success == false || await _marketProductRepository.Update(marketProduct) == false)
+            {
+                continue;
+            }
+
+            orderedMarketProducts.Add(new MarketProductOrderPosition(marketProduct, marketProductPosition.quantity));
         }
 
         OrderStatus? createdOrderStatus = await _orderRepository.GetOrderStatusByKey(OrderStatusKey.CREATED);

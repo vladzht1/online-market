@@ -17,6 +17,7 @@ public class MarketProductRepositoryImpl : IMarketProductRepository
             .Where(p => marketProductSearchQueryDto.ProductId == null || p.Product.Id == marketProductSearchQueryDto.ProductId)
             .Where(p => marketProductSearchQueryDto.MarketId == null || p.Market.Id == marketProductSearchQueryDto.MarketId)
             .Where(p => marketProductSearchQueryDto.StoreId == null || p.Store.Id == marketProductSearchQueryDto.StoreId)
+            .Where(p => p.Quantity > 0)
             .Include(product => product.Market)
             .Include(product => product.Product)
             .Include(product => product.Price)
@@ -51,9 +52,18 @@ public class MarketProductRepositoryImpl : IMarketProductRepository
         return result.Entity.Id;
     }
 
-    public Task<bool> Update(AvailableProduct marketProduct)
+    public async Task<bool> Update(AvailableProduct marketProduct)
     {
-        throw new NotImplementedException();
+        using var db = new ApplicationPostgresContext();
+
+        db.Entry(marketProduct.Market).State = EntityState.Detached;
+        db.Entry(marketProduct.Product).State = EntityState.Detached;
+        db.Entry(marketProduct.Store).State = EntityState.Detached;
+
+        db.Entry(marketProduct).State = EntityState.Modified;
+        await db.SaveChangesAsync();
+
+        return true;
     }
 
     public async Task<bool> Delete(int marketProductId)

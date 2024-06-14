@@ -2,7 +2,7 @@ import { Button, Callout, Flex, HoverCard, Spinner, Table } from "@radix-ui/them
 import { FC } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 
-import { User, UserWithAddress } from "../../../models/user";
+import { User } from "../../../models/user";
 import { formatDateTimeString } from "../../../shared/formatters";
 import { MessageReceiver, MessageType } from "../../../shared/types";
 import { AddressDataList } from "../../entities/address/address-data-list";

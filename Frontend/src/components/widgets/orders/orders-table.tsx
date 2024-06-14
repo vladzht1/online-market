@@ -49,7 +49,9 @@ export const OrdersTable: FC<IOrdersTableProps> = ({ orders, messageReceiver, re
                   <Table.RowHeaderCell>
                     <Link to={`/orders/${order.id}`}>Заказ №{order.id}</Link>
                   </Table.RowHeaderCell>
-                  <Table.Cell>{order.user.login}</Table.Cell>
+                  <Table.Cell>
+                    {order.user.lastName} {order.user.firstName} {order.user.middleName}
+                  </Table.Cell>
                   <Table.Cell>
                     <HoverCard.Root>
                       <HoverCard.Trigger>
