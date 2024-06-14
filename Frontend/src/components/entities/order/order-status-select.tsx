@@ -1,9 +1,9 @@
-import { Select } from "@radix-ui/themes";
+import { Select, Text } from "@radix-ui/themes";
 import { FC, useEffect, useRef, useState } from "react";
 import { useQuery } from "react-query";
 
 import { getAllOrderStatuses } from "../../../api/orders";
-import { OrderStatus } from "../../../models/order";
+import { OrderStatus, OrderStatusKey } from "../../../models/order";
 
 interface IOrderStatusSelectProps {
   initialValue: OrderStatus;
@@ -46,16 +46,22 @@ export const OrderStatusSelect: FC<IOrderStatusSelectProps> = ({ initialValue, o
   return (
     <>
       {statuses?.data && (
-        <Select.Root defaultValue={activeStatus?.key + ""} onValueChange={(value) => handleStatusChange(value)}>
-          <Select.Trigger variant="surface" color="gray" />
-          <Select.Content>
-            {statuses?.data.map((status: OrderStatus) => (
-              <Select.Item value={status.key + ""} key={status.id}>
-                {status.labelRus}
-              </Select.Item>
-            ))}
-          </Select.Content>
-        </Select.Root>
+        <>
+          {initialValue.key === OrderStatusKey.DELIVERED ? (
+            <Text>{initialValue.labelRus}</Text>
+          ) : (
+            <Select.Root defaultValue={activeStatus?.key + ""} onValueChange={(value) => handleStatusChange(value)}>
+              <Select.Trigger variant="surface" color="gray" />
+              <Select.Content>
+                {statuses?.data.map((status: OrderStatus) => (
+                  <Select.Item value={status.key + ""} key={status.id}>
+                    {status.labelRus}
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Root>
+          )}
+        </>
       )}
     </>
   );

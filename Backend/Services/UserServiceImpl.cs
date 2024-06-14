@@ -16,6 +16,11 @@ public class UserServiceImpl(IUserRepository userRepository) : IUserService
         return _userRepository.GetAll();
     }
 
+    public async Task<User[]> GetUserWhereNameLengthGreaterThan(int minimalNameLength)
+    {
+        return await _userRepository.GetUserWhereNameLengthGreaterThan(minimalNameLength);
+    }
+
     public async Task<Result<User>> GetUserById(int userId)
     {
         User? user = await _userRepository.GetUserById(userId);

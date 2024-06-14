@@ -11,6 +11,7 @@ public class Order : BaseEntity
         AddressForDelivery = address;
         User = user;
         Status = status;
+        CreatedAt = DateTime.UtcNow;
         LastStatusUpdated = DateTime.UtcNow;
     }
 
@@ -23,6 +24,9 @@ public class Order : BaseEntity
     public Address AddressForDelivery { get; private set; } = null!;
     public User User { get; private set; } = null!;
     public OrderStatus Status { get; private set; } = null!;
+
+    [Column(name: "created_at")]
+    public DateTime CreatedAt { get; private set; }
 
     [Column(name: "last_status_update_at")]
     public DateTime LastStatusUpdated { get; private set; }

@@ -16,6 +16,16 @@ public class ProductServiceImpl(IProductRepository productRepository) : IProduct
         return _productRepository.GetAll();
     }
 
+    public async Task<Product[]> GetProductsByMarketName(string marketName)
+    {
+        return await _productRepository.GetProductsByMarketName(marketName);
+    }
+
+    public async Task<Product[]> GetProductsByStoreName(string storeName)
+    {
+        return await _productRepository.GetProductsByStoreName(storeName);
+    }
+
     public async Task<Result<Product>> GetById(int productId)
     {
         Product? product = await _productRepository.GetById(productId);

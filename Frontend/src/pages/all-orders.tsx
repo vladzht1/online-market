@@ -1,7 +1,8 @@
 import { Button, Callout, Flex, Text } from "@radix-ui/themes";
 import { FC } from "react";
-import { useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 
+import { getAllOrders } from "../api/orders";
 import { AddOrderModal } from "../components/features/orders/add-order-modal";
 import { ContainerWithPadding } from "../components/shared/container";
 import { Header } from "../components/widgets/header";
@@ -10,13 +11,15 @@ import { useMessage } from "../hooks/use-message";
 import { MessageReceiver } from "../shared/types";
 
 export const AllOrdersPage: FC = () => {
-  const queryClient = useQueryClient();
+  const { data, isFetching, refetch } = useQuery("orders", async () => await getAllOrders(), {
+    keepPreviousData: true,
+  });
 
   const { addMessage, getMessages, hasMessages } = useMessage();
 
   const messageReceiver: MessageReceiver = (message, messageType, success) => {
     if (success) {
-      queryClient.invalidateQueries("orders");
+      refetch();
     }
 
     addMessage(message, messageType);
@@ -46,7 +49,12 @@ export const AllOrdersPage: FC = () => {
           </Flex>
         )}
 
-        <OrdersTable messageReceiver={messageReceiver} />
+        <OrdersTable
+          isLoading={isFetching && !data}
+          orders={data?.data || []}
+          messageReceiver={messageReceiver}
+          refetch={refetch}
+        />
       </ContainerWithPadding>
     </>
   );

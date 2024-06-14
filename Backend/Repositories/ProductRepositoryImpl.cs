@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 using MK.Database;
 using MK.Models;
@@ -14,6 +15,45 @@ public class ProductRepositoryImpl : IProductRepository
             .Include(product => product.Images)
             .Include(product => product.Properties)
             .ToArrayAsync();
+    }
+
+    public async Task<Product[]> GetProductsByMarketName(string marketName)
+    {
+        using var db = new ApplicationPostgresContext();
+
+        NpgsqlParameter param = new("name", "%" + marketName.ToLower() + "%");
+
+        var data = await db.Products.FromSqlRaw(
+            "SELECT products.id, products.name, products.description FROM products " +
+            "JOIN order_positions ON (products.id = order_positions.\"ProductId\") " +
+            "JOIN orders ON (order_positions.order_id = orders.id) " +
+            "WHERE orders.\"MarketId\" IN " +
+            "(SELECT id FROM markets WHERE LOWER(name) LIKE @name)", param
+        )
+            .Include(product => product.Images)
+            .Include(product => product.Properties)
+            .ToArrayAsync();
+
+        return data;
+    }
+
+    public async Task<Product[]> GetProductsByStoreName(string storeName)
+    {
+        using var db = new ApplicationPostgresContext();
+
+        NpgsqlParameter param = new("label", "%" + storeName.ToLower() + "%");
+
+        var data = await db.Products.FromSqlRaw(
+            "SELECT * FROM products " +
+            "WHERE EXISTS (SELECT * FROM available_products " +
+            "WHERE products.id = available_products.\"ProductId\" AND \"StoreId\" IN " +
+            "(SELECT id FROM stores WHERE LOWER(label) LIKE @label))", param
+        )
+            .Include(product => product.Images)
+            .Include(product => product.Properties)
+            .ToArrayAsync();
+
+        return data;
     }
 
     public async Task<Product?> GetById(int productId)

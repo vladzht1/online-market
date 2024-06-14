@@ -17,6 +17,11 @@ public class StoreServiceImpl(IStoreRepository storeRepository, IAddressReposito
         return _storeRepository.GetAll();
     }
 
+    public async Task<Store[]> GetStoresByMarketName(string marketName)
+    {
+        return await _storeRepository.GetStoresByMarketName(marketName);
+    }
+
     public async Task<Result<Store>> GetById(int storeId)
     {
         Store? store = await _storeRepository.GetById(storeId);

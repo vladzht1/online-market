@@ -26,6 +26,7 @@ export const MarketProductsTable: FC<IMarketProductsTableProps> = ({ products, r
         <Table.Row>
           <Table.ColumnHeaderCell>ID</Table.ColumnHeaderCell>
           {showMarketName && <Table.ColumnHeaderCell>Магазин</Table.ColumnHeaderCell>}
+          <Table.ColumnHeaderCell>Склад</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Название товара</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Описание</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell>Количество</Table.ColumnHeaderCell>
@@ -43,6 +44,7 @@ export const MarketProductsTable: FC<IMarketProductsTableProps> = ({ products, r
                 {product.market && <Link to={`/markets/${product.market.id}`}>{product.market.name}</Link>}
               </Table.Cell>
             )}
+            <Table.Cell>{product.store.label}</Table.Cell>
             <Table.Cell>
               <Link to={`/products/${product.product.id}`}>{product.product.name}</Link>
             </Table.Cell>

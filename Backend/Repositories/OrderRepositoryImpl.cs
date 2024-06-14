@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 using MK.Database;
 using MK.Models;
@@ -40,6 +41,30 @@ public class OrderRepositoryImpl : IOrderRepository
             .Include(order => order.ProductPositions)
                 .ThenInclude(orderPosition => orderPosition.Price)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<Order[]> GetByMarketName(string marketName)
+    {
+        using var db = new ApplicationPostgresContext();
+
+        NpgsqlParameter param = new("name", "%" + marketName.ToLower() + "%");
+
+        return await db.Orders.FromSqlRaw(
+            "SELECT * FROM orders " +
+            "WHERE AGE(created_at, now()) < '2 days' AND \"MarketId\" IN " +
+            "(SELECT id FROM markets WHERE LOWER(name) LIKE @name)", param
+        )
+            .Include(order => order.User)
+            .Include(order => order.Market)
+            .Include(order => order.Status)
+            .Include(order => order.AddressForDelivery)
+            .Include(order => order.ProductPositions)
+                .ThenInclude(orderPosition => orderPosition.Product)
+            .Include(order => order.ProductPositions)
+                .ThenInclude(orderPosition => orderPosition.Store)
+            .Include(order => order.ProductPositions)
+                .ThenInclude(orderPosition => orderPosition.Price)
+            .ToArrayAsync();
     }
 
     public async Task<OrderStatus[]> GetAllOrderStatuses()

@@ -1,7 +1,8 @@
 import { Button, Callout, Flex, Text } from "@radix-ui/themes";
 import { FC } from "react";
-import { useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 
+import { getAllProducts } from "../api/products";
 import { AddProductModal } from "../components/features/products/add-product-modal";
 import { ContainerWithPadding } from "../components/shared/container";
 import { Header } from "../components/widgets/header";
@@ -10,13 +11,15 @@ import { useMessage } from "../hooks/use-message";
 import { MessageReceiver } from "../shared/types";
 
 export const AllProductsPage: FC = () => {
-  const queryClient = useQueryClient();
-
+  const { data, isFetching, refetch, remove } = useQuery("products", async () => await getAllProducts(), {
+    keepPreviousData: true,
+  });
   const { addMessage, getMessages, hasMessages } = useMessage();
 
   const messageReceiver: MessageReceiver = (message, messageType, success) => {
     if (success) {
-      queryClient.invalidateQueries("products");
+      remove();
+      refetch();
     }
 
     addMessage(message, messageType);
@@ -46,7 +49,11 @@ export const AllProductsPage: FC = () => {
           </Flex>
         )}
 
-        <ProductsTable messageReceiver={messageReceiver} />
+        <ProductsTable
+          products={data?.data || []}
+          messageReceiver={messageReceiver}
+          isLoading={isFetching && !data?.data}
+        />
       </ContainerWithPadding>
     </>
   );

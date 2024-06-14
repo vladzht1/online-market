@@ -62,9 +62,6 @@ export const ProductToMarketForm: FC<IProductToMarketFormProps> = ({ children, i
   }, [initialData?.marketId, market]);
 
   useEffect(() => {
-    // FIXME: this gets called to many times
-    // console.log(market);
-
     onChange?.({
       marketId: market?.id || 0,
       productId: product?.id || 0,

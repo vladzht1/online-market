@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 using MK.Database;
 using MK.Models;
@@ -13,6 +14,14 @@ public class UserRepositoryImpl : IUserRepository
         return await db.Users
             .Include(user => user.DeliveryAddress)
             .ToArrayAsync();
+    }
+
+    public async Task<User[]> GetUserWhereNameLengthGreaterThan(int minimalNameLength)
+    {
+        using var db = new ApplicationPostgresContext();
+
+        NpgsqlParameter param = new("length", minimalNameLength);
+        return await db.Users.FromSqlRaw("SELECT * FROM users WHERE LENGTH(first_name) > @length", param).ToArrayAsync();
     }
 
     public async Task<User?> GetUserById(int userId)

@@ -22,6 +22,11 @@ public class OrderServiceImpl(
         return await _orderRepository.GetAll();
     }
 
+    public async Task<Order[]> GetByMarketName(string marketName)
+    {
+        return await _orderRepository.GetByMarketName(marketName);
+    }
+
     public async Task<OrderStatus[]> GetAllOrderStatuses()
     {
         return await _orderRepository.GetAllOrderStatuses();

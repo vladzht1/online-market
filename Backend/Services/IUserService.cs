@@ -8,6 +8,7 @@ namespace MK.Services;
 public interface IUserService
 {
     public Task<User[]> GetAll();
+    public Task<User[]> GetUserWhereNameLengthGreaterThan(int minimalNameLength);
     public Task<Result<User>> GetUserById(int userId);
     public Task<Result<User>> Create(CreateUserDto createUserDto);
     public Task<Result<User>> Update(UpdateUserDto updateUserDto);

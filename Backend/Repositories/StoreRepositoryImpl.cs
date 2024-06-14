@@ -1,3 +1,4 @@
+using Npgsql;
 using Microsoft.EntityFrameworkCore;
 
 using MK.Database;
@@ -13,6 +14,25 @@ public class StoreRepositoryImpl : IStoreRepository
         return await db.Stores
             .Include(store => store.Address)
             .ToArrayAsync();
+    }
+
+    public async Task<Store[]> GetStoresByMarketName(string marketName)
+    {
+        using var db = new ApplicationPostgresContext();
+
+        NpgsqlParameter param = new("name", "%" + marketName.ToLower() + "%");
+
+        var data = await db.Stores.FromSqlRaw(
+            "SELECT stores.id, stores.label, stores.\"AddressId\" FROM stores " +
+            "JOIN available_products ON (stores.id = available_products.\"StoreId\") " +
+            "WHERE available_products.\"StoreId\" = stores.id AND " +
+            "available_products.\"MarketId\" IN " +
+            "(SELECT id FROM markets WHERE LOWER(name) LIKE @name)", param
+        )
+            .Include(store => store.Address)
+            .ToArrayAsync();
+
+        return data;
     }
 
     public async Task<Store?> GetById(int storeId)
