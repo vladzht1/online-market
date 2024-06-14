@@ -16,6 +16,7 @@ public class StoreRepositoryImpl : IStoreRepository
             .ToArrayAsync();
     }
 
+    // Выбрать все склады, на которых хранит магазин
     public async Task<Store[]> GetStoresByMarketName(string marketName)
     {
         using var db = new ApplicationPostgresContext();

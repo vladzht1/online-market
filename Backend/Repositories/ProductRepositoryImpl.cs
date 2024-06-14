@@ -17,6 +17,7 @@ public class ProductRepositoryImpl : IProductRepository
             .ToArrayAsync();
     }
 
+    // Выбрать все товары, купленные из магазина
     public async Task<Product[]> GetProductsByMarketName(string marketName)
     {
         using var db = new ApplicationPostgresContext();
@@ -37,6 +38,7 @@ public class ProductRepositoryImpl : IProductRepository
         return data;
     }
 
+    // Выбрать все такие товары, которые лежат на складе с названием
     public async Task<Product[]> GetProductsByStoreName(string storeName)
     {
         using var db = new ApplicationPostgresContext();

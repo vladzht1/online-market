@@ -43,6 +43,7 @@ public class OrderRepositoryImpl : IOrderRepository
             .FirstOrDefaultAsync();
     }
 
+    // Выбрать все заказы, сделанные за последние 2 дня из магазина
     public async Task<Order[]> GetByMarketName(string marketName)
     {
         using var db = new ApplicationPostgresContext();

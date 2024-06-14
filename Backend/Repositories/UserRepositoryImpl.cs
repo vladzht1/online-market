@@ -16,12 +16,16 @@ public class UserRepositoryImpl : IUserRepository
             .ToArrayAsync();
     }
 
+    // Выбрать всех пользователей с длиной имени больше 5 символов
     public async Task<User[]> GetUserWhereNameLengthGreaterThan(int minimalNameLength)
     {
         using var db = new ApplicationPostgresContext();
 
         NpgsqlParameter param = new("length", minimalNameLength);
-        return await db.Users.FromSqlRaw("SELECT * FROM users WHERE LENGTH(first_name) > @length", param).ToArrayAsync();
+
+        return await db.Users.FromSqlRaw(
+            "SELECT * FROM users WHERE LENGTH(first_name) > @length", param
+        ).ToArrayAsync();
     }
 
     public async Task<User?> GetUserById(int userId)
