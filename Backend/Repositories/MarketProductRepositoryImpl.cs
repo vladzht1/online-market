@@ -1,3 +1,4 @@
+using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 
 using MK.Database;
@@ -18,6 +19,7 @@ public class MarketProductRepositoryImpl : IMarketProductRepository
             .Where(p => marketProductSearchQueryDto.MarketId == null || p.Market.Id == marketProductSearchQueryDto.MarketId)
             .Where(p => marketProductSearchQueryDto.StoreId == null || p.Store.Id == marketProductSearchQueryDto.StoreId)
             .Where(p => p.Quantity > 0)
+            .OrderBy(product => product.Id)
             .Include(product => product.Market)
             .Include(product => product.Product)
             .Include(product => product.Price)
@@ -42,9 +44,9 @@ public class MarketProductRepositoryImpl : IMarketProductRepository
     {
         using var db = new ApplicationPostgresContext();
 
-        db.ChangeTracker.Context.Attach(marketProduct.Market);
-        db.ChangeTracker.Context.Attach(marketProduct.Product);
-        db.ChangeTracker.Context.Attach(marketProduct.Store);
+        db.Entry(marketProduct.Market).State = EntityState.Unchanged;
+        db.Entry(marketProduct.Product).State = EntityState.Unchanged;
+        db.Entry(marketProduct.Store).State = EntityState.Unchanged;
 
         var result = await db.AvailableProducts.AddAsync(marketProduct);
         await db.SaveChangesAsync();

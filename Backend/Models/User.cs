@@ -29,5 +29,6 @@ public class User : BaseEntity
     [Column("updated_at")]
     public DateTime UpdatedAt { get; set; }
 
+    [Column(name: "address_id")]
     public Address DeliveryAddress { get; set; } = null!;
 }

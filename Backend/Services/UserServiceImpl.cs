@@ -43,7 +43,7 @@ public class UserServiceImpl(IUserRepository userRepository) : IUserService
             Street = createUserDto.address.street,
             Building = createUserDto.address.building,
             Apartment = createUserDto.address.apartment,
-            AddressIndex = createUserDto.address.addressIndex,
+            ZipCode = createUserDto.address.zipCode,
             Comment = createUserDto.address.comment,
         };
 

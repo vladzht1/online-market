@@ -8,6 +8,6 @@ public class CreateAddressDto
     public string street { get; set; } = string.Empty;
     public string building { get; set; } = string.Empty;
     public string apartment { get; set; } = string.Empty;
-    public string addressIndex { get; set; } = string.Empty;
+    public string zipCode { get; set; } = string.Empty;
     public string comment { get; set; } = string.Empty;
 }

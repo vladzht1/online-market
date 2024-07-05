@@ -87,7 +87,7 @@ export const OrderForm: FC<IOrderFormProps> = ({ children, onChange }) => {
           </Text>
 
           {formState.map((orderPosition, index) => (
-            <Flex gap="1" mb="1" position="relative" flexGrow="1" key={index}>
+            <Flex gap="1" mb="1" position="relative" direction="column" key={index}>
               {data?.data && (
                 <MarketProductSelect
                   availableProducts={data?.data}
@@ -96,17 +96,20 @@ export const OrderForm: FC<IOrderFormProps> = ({ children, onChange }) => {
                 />
               )}
 
-              <IconButton variant="soft" onClick={() => changeQuantity(index, -1)}>
-                <FaMinus />
-              </IconButton>
-              <TextField.Root type="number" value={orderPosition.quantity} style={{ width: "fit-content" }} disabled />
-              <IconButton variant="soft" onClick={() => changeQuantity(index, 1)}>
-                <FaPlus />
-              </IconButton>
-
-              <IconButton variant="soft" color="red" onClick={() => removeRow(orderPosition.id)}>
-                <FaTrash />
-              </IconButton>
+              <Flex justify="between">
+                <Flex gap="1">
+                  <IconButton variant="soft" onClick={() => changeQuantity(index, -1)}>
+                    <FaMinus />
+                  </IconButton>
+                  <TextField.Root type="number" value={orderPosition.quantity} style={{ maxWidth: "50px" }} disabled />
+                  <IconButton variant="soft" onClick={() => changeQuantity(index, 1)}>
+                    <FaPlus />
+                  </IconButton>
+                </Flex>
+                <IconButton variant="soft" color="red" onClick={() => removeRow(orderPosition.id)}>
+                  <FaTrash />
+                </IconButton>
+              </Flex>
             </Flex>
           ))}
 

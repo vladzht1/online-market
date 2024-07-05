@@ -27,13 +27,6 @@ public class ApplicationPostgresContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Market>(entity => {
-            entity
-                .HasOne(market => market.OfficeAddress)
-                .WithOne()
-                .HasForeignKey<Address>(address => address.MarketId);
-        });
-
         modelBuilder.Entity<Product>(entity => {
             entity
                 .HasMany(product => product.Properties)

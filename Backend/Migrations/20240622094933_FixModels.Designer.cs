@@ -3,6 +3,7 @@ using System;
 using MK.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(ApplicationPostgresContext))]
-    partial class ApplicationPostgresContextModelSnapshot : ModelSnapshot
+    [Migration("20240622094933_FixModels")]
+    partial class FixModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,6 +59,10 @@ namespace Backend.Migrations
                         .HasColumnType("text")
                         .HasColumnName("country_code");
 
+                    b.Property<int?>("MarketId")
+                        .HasColumnType("integer")
+                        .HasColumnName("market_id");
+
                     b.Property<string>("Region")
                         .IsRequired()
                         .HasColumnType("text")
@@ -72,6 +79,9 @@ namespace Backend.Migrations
                         .HasColumnName("zip_code");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MarketId")
+                        .IsUnique();
 
                     b.ToTable("addresses");
                 });
@@ -138,12 +148,7 @@ namespace Backend.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<int>("OfficeAddressId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("OfficeAddressId");
 
                     b.ToTable("markets");
                 });
@@ -462,6 +467,13 @@ namespace Backend.Migrations
                     b.ToTable("users");
                 });
 
+            modelBuilder.Entity("MK.Models.Address", b =>
+                {
+                    b.HasOne("MK.Models.Market", null)
+                        .WithOne("OfficeAddress")
+                        .HasForeignKey("MK.Models.Address", "MarketId");
+                });
+
             modelBuilder.Entity("MK.Models.AvailableProduct", b =>
                 {
                     b.HasOne("MK.Models.Market", "Market")
@@ -495,17 +507,6 @@ namespace Backend.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Store");
-                });
-
-            modelBuilder.Entity("MK.Models.Market", b =>
-                {
-                    b.HasOne("MK.Models.Address", "OfficeAddress")
-                        .WithMany()
-                        .HasForeignKey("OfficeAddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OfficeAddress");
                 });
 
             modelBuilder.Entity("MK.Models.Order", b =>
@@ -639,6 +640,12 @@ namespace Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("DeliveryAddress");
+                });
+
+            modelBuilder.Entity("MK.Models.Market", b =>
+                {
+                    b.Navigation("OfficeAddress")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MK.Models.Order", b =>

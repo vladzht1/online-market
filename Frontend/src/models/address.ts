@@ -6,6 +6,6 @@ export class Address {
   public street!: string;
   public building!: string;
   public apartment!: string;
-  public addressIndex!: string;
+  public zipCode!: string;
   public comment!: string;
 }

@@ -87,13 +87,21 @@ public class OrderPosition : BaseEntity
     {
     }
 
+    [Column(name: "store_id")]
     public Store Store { get; private set; } = null!;
+
+    [Column(name: "product_id")]
     public Product Product { get; private set; } = null!;
+
     public Order Order { get; private set; } = null!;
 
     [Column(name: "order_id")]
     public int OrderId { get; private set; }
+
+    [Column(name: "price_id")]
     public Price Price { get; private set; } = null!;
+
+    [Column(name: "quantity")]
     public int Quantity { get; private set; }
 }
 

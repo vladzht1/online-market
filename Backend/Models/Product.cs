@@ -148,6 +148,21 @@ public class AvailableProduct : BaseEntity
     {
     }
 
+    [Column(name: "store_id")]
+    public Store Store { get; private set; } = null!;
+
+    [Column(name: "market_id")]
+    public Market Market { get; private set; } = null!;
+
+    [Column(name: "price_id")]
+    public Price Price { get; private set; } = null!;
+
+    [Column(name: "product_id")]
+    public Product Product { get; private set; } = null!;
+
+    [Column(name: "quantity")]
+    public int Quantity { get; set; }
+
     public bool DecreaseQuantity(int delta)
     {
         if (delta < 1 || delta > Quantity)
@@ -158,12 +173,4 @@ public class AvailableProduct : BaseEntity
         Quantity -= delta;
         return true;
     }
-
-    public Store Store { get; private set; } = null!;
-    public Market Market { get; private set; } = null!;
-    public Price Price { get; private set; } = null!;
-    public Product Product { get; private set; } = null!;
-
-    [Column(name: "quantity")]
-    public int Quantity { get; set; }
 }

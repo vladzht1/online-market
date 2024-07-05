@@ -15,7 +15,7 @@ export const MarketForm: FC<IMarketFormProps> = ({ children, initialData, onChan
       id: -1,
       name: "",
       description: "",
-      links: [],
+      links: "",
     }
   );
 
@@ -27,9 +27,9 @@ export const MarketForm: FC<IMarketFormProps> = ({ children, initialData, onChan
     setFormState({ ...formState, [key]: value });
   };
 
-  const normalizeLinksString = (links: string): string[] => {
-    return links.split("\n").map((link) => link.trim());
-  };
+  // const normalizeLinksString = (links: string): string[] => {
+  //   return links.split("\n").map((link) => link.trim());
+  // };
 
   return (
     <>
@@ -59,8 +59,8 @@ export const MarketForm: FC<IMarketFormProps> = ({ children, initialData, onChan
             Ссылки
           </Text>
           <TextField.Root
-            value={formState.links.join("\n")}
-            onChange={(event) => setValue("links", normalizeLinksString(event.target.value))}
+            value={formState.links}
+            onChange={(event) => setValue("links", event.target.value)}
             placeholder="Ссылки"
           />
         </label>

@@ -53,7 +53,7 @@ public class MarketServiceImpl(
             Street = createMarketDto.address.street,
             Building = createMarketDto.address.building,
             Apartment = createMarketDto.address.apartment,
-            AddressIndex = createMarketDto.address.addressIndex,
+            ZipCode = createMarketDto.address.zipCode,
             Comment = createMarketDto.address.comment,
         };
 

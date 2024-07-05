@@ -41,7 +41,7 @@ export const AddressDataList: FC<IAddressDataListProps> = ({ address, minWidth }
       </DataList.Item>
       <DataList.Item>
         <DataList.Label minWidth={itemMinWidth.current}>Почтовый индекс</DataList.Label>
-        <DataList.Value>{address.addressIndex}</DataList.Value>
+        <DataList.Value>{address.zipCode}</DataList.Value>
       </DataList.Item>
       <DataList.Item>
         <DataList.Label minWidth={itemMinWidth.current}>Комментарий</DataList.Label>

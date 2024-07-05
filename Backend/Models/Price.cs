@@ -24,7 +24,10 @@ public class Price : BaseEntity
     {
     }
 
+    [Column(name: "product_id")]
     public Product Product { get; private set; } = null!;
+
+    [Column(name: "market_id")]
     public Market Market { get; private set; } = null!;
 
     [Column(name: "value")]

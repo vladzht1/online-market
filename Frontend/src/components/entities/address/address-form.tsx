@@ -19,7 +19,7 @@ export const AddressForm: FC<IAddressFormProps> = ({ children, initialData, onCh
       street: "",
       building: "",
       apartment: "",
-      addressIndex: "",
+      zipCode: "",
       comment: "",
     }
   );
@@ -100,8 +100,8 @@ export const AddressForm: FC<IAddressFormProps> = ({ children, initialData, onCh
             Почтовый индекс
           </Text>
           <TextField.Root
-            value={formState.addressIndex}
-            onChange={(event) => setValue("addressIndex", event.target.value)}
+            value={formState.zipCode}
+            onChange={(event) => setValue("zipCode", event.target.value)}
             placeholder="Почтовый индекс"
           />
         </label>

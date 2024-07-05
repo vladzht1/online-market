@@ -14,6 +14,7 @@ public class ProductRepositoryImpl : IProductRepository
         return await db.Products
             .Include(product => product.Images)
             .Include(product => product.Properties)
+            .OrderBy(product => product.Id)
             .ToArrayAsync();
     }
 

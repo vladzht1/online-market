@@ -23,14 +23,9 @@ public class Address : BaseEntity
     [Column("apartment")]
     public string Apartment { get; set; } = string.Empty;
 
-    // TODO: rename to `zip_code`
-    [Column("address_index")]
-    public string AddressIndex { get; set; } = string.Empty;
+    [Column("zip_code")]
+    public string ZipCode { get; set; } = string.Empty;
 
     [Column("comment")]
     public string Comment { get; set; } = string.Empty;
-
-    // TODO: remove
-    [Column("market_id")]
-    public int? MarketId { get; set; }
 }

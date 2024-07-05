@@ -9,6 +9,6 @@ public class UpdateAddressDto
     public string? street { get; set; }
     public string? building { get; set; }
     public string? apartment { get; set; }
-    public string? addressIndex { get; set; }
+    public string? zipCode { get; set; }
     public string? comment { get; set; }
 }

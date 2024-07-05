@@ -7,7 +7,7 @@ namespace MK.Models;
 [Table(name: "markets")]
 public class Market : BaseEntity
 {
-    public Market(string name, string description, string[] links, Address officeAddress)
+    public Market(string name, string description, string links, Address officeAddress)
     {
         Name = name;
         Description = description;
@@ -19,14 +19,16 @@ public class Market : BaseEntity
     {
     }
 
-    [Column(name: "name", TypeName = "varchar(128)")]
+    [Column(name: "name")]
     public string Name { get; private set; } = string.Empty;
 
-    [Column(name: "description", TypeName = "varchar(256)")]
+    [Column(name: "description")]
     public string Description { get; private set; } = string.Empty;
 
     [Column(name: "links")]
-    public string[] Links { get; private set; } = [];
+    public string Links { get; private set; } = null!;
+
+    [Column(name: "office_address_id")]
     public Address OfficeAddress { get; set; } = null!;
 
     public void UpdateName(string updatedName)
@@ -59,7 +61,7 @@ public class Market : BaseEntity
         Description = updatedDescription;
     }
 
-    public void UpdateLinks(string[] updatedLinks)
+    public void UpdateLinks(string updatedLinks)
     {
         Links = updatedLinks;
     }

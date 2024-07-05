@@ -44,7 +44,7 @@ public class StoreServiceImpl(IStoreRepository storeRepository, IAddressReposito
             Street = createStoreDto.Address.street,
             Building = createStoreDto.Address.building,
             Apartment = createStoreDto.Address.apartment,
-            AddressIndex = createStoreDto.Address.addressIndex,
+            ZipCode = createStoreDto.Address.zipCode,
             Comment = createStoreDto.Address.comment,
         };
 

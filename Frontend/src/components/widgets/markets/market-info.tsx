@@ -74,11 +74,14 @@ export const MarketInfo: FC<IMarketInfoProps> = ({ marketId, redirectBack }) => 
               Ссылки
             </Text>
             <Box>
-              {market.links.map((link) => (
-                <Link href={link} target="_blank" key={link}>
-                  {link}
-                </Link>
-              ))}
+              {market.links
+                .split(",")
+                .map((link) => link.trim())
+                .map((link) => (
+                  <Link href={link} target="_blank" key={link}>
+                    {link}
+                  </Link>
+                ))}
             </Box>
           </Box>
 

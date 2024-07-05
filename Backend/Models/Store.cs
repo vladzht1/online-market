@@ -21,6 +21,7 @@ public class Store : BaseEntity
     [Column("label")]
     public string Label { get; set; } = string.Empty;
 
+    [Column(name: "address_id")]
     public Address Address { get; set; } = null!;
 
     public bool UpdateLabel(string updatedLabel)
